@@ -16,6 +16,8 @@
         // Relations
         public Process Process { get; set; }
         public Form Form { get; set; }
-        public ICollection<Answer> Answers { get; set; }
+        public ICollection<FormQuestionProcess> FormQuestionProcesses { get; set; }
+
+        //public ICollection<Answer> Answers { get; set; }
     }
 }

@@ -3,8 +3,7 @@
     public class Answer
     {
         public int AnswerID { get; set; }
-        public int FormQuestionID { get; set; }
-        public int FormProcessID { get; set; }
+        public int FormQuestionProcessID { get; set; }
         public string AnswerText { get; set; }  
         public int? AnswerOptionID { get; set; }  
         public string FilePath { get; set; }  
@@ -17,7 +16,6 @@
 
         // Relations
         public AnswerOption AnswerOption { get; set; }
-        public FormQuestion FormQuestion { get; set; }
-        public FormProcess FormProcess { get; set; }
+        public FormQuestionProcess FormQuestionProcess { get; set; }
     }
 }
