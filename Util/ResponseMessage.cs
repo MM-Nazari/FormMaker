@@ -16,7 +16,7 @@
         public const string ProcessUpdated = "Process updated successfully";
         public const string ProcessDeleted = "Process deleted successfully";
 
-        // Form Messages
+        // Form
         public const string FormNotFound = "Form not found";
         public const string FormRetrieved = "Form retrieved successfully";
         public const string FormCreated = "Form created successfully";
@@ -29,5 +29,12 @@
         public const string AnswerCreated = "Answer created successfully";
         public const string AnswerUpdated = "Answer updated successfully";
         public const string AnswerDeleted = "Answer deleted successfully";
+
+        // AnswerOption
+        public const string AnswerOptionNotFound = "AnswerOption not found";
+        public const string AnswerOptionRetrieved = "AnswerOption retrieved successfully";
+        public const string AnswerOptionCreated = "AnswerOption created successfully";
+        public const string AnswerOptionUpdated = "AnswerOption updated successfully";
+        public const string AnswerOptionDeleted = "AnswerOption deleted successfully";
     }
 }

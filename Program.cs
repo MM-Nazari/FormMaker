@@ -10,6 +10,7 @@ builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IProcessService, ProcessService>();
 builder.Services.AddScoped<IFormService, FormService>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
+builder.Services.AddScoped<IAnswerOptionService, AnswerOptionService>();
 
 builder.Services.AddControllers();
 
@@ -33,7 +34,7 @@ builder.Services.AddSwaggerGen(c =>
 
         // Users Groups
         // Include controllers with specific group names
-        var allowedGroups = new[] {"Questions", "Processes", "Forms", "Answers"};
+        var allowedGroups = new[] {"Questions", "Processes", "Forms", "Answers", "AnswerOptions"};
         return allowedGroups.Contains(apiDesc.GroupName);
 
 
