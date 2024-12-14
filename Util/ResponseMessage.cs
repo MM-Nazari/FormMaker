@@ -22,5 +22,12 @@
         public const string FormCreated = "Form created successfully";
         public const string FormUpdated = "Form updated successfully";
         public const string FormDeleted = "Form deleted successfully";
+
+        // Answer
+        public const string AnswerNotFound = "Answer not found";
+        public const string AnswerRetrieved = "Answer retrieved successfully";
+        public const string AnswerCreated = "Answer created successfully";
+        public const string AnswerUpdated = "Answer updated successfully";
+        public const string AnswerDeleted = "Answer deleted successfully";
     }
 }
