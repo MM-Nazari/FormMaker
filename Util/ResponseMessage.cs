@@ -50,5 +50,12 @@
         public const string FormQuestionCreated = "Form question created successfully";
         public const string FormQuestionUpdated = "Form question updated successfully";
         public const string FormQuestionDeleted = "Form question deleted successfully";
+
+        // FormQuestionProcess
+        public const string FormQuestionProcessNotFound = "Form question process not found";
+        public const string FormQuestionProcessRetrieved = "Form question process retrieved successfully";
+        public const string FormQuestionProcessCreated = "Form question process created successfully";
+        public const string FormQuestionProcessUpdated = "Form question process updated successfully";
+        public const string FormQuestionProcessDeleted = "Form question process deleted successfully";
     }
 }
