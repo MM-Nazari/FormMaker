@@ -36,5 +36,12 @@
         public const string AnswerOptionCreated = "AnswerOption created successfully";
         public const string AnswerOptionUpdated = "AnswerOption updated successfully";
         public const string AnswerOptionDeleted = "AnswerOption deleted successfully";
+
+        // Form Process
+        public const string FormProcessNotFound = "Form process not found";
+        public const string FormProcessRetrieved = "Form process retrieved successfully";
+        public const string FormProcessCreated = "Form process created successfully";
+        public const string FormProcessUpdated = "Form process updated successfully";
+        public const string FormProcessDeleted = "Form process deleted successfully";
     }
 }
