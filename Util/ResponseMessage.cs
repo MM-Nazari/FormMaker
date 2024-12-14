@@ -15,5 +15,12 @@
         public const string ProcessCreated = "Process created successfully";
         public const string ProcessUpdated = "Process updated successfully";
         public const string ProcessDeleted = "Process deleted successfully";
+
+        // Form Messages
+        public const string FormNotFound = "Form not found";
+        public const string FormRetrieved = "Form retrieved successfully";
+        public const string FormCreated = "Form created successfully";
+        public const string FormUpdated = "Form updated successfully";
+        public const string FormDeleted = "Form deleted successfully";
     }
 }
