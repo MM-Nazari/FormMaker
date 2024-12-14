@@ -1,4 +1,5 @@
 using FormMaker.Interface;
+using FormMaker.Model;
 using FormMaker.Service;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -12,6 +13,7 @@ builder.Services.AddScoped<IFormService, FormService>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
 builder.Services.AddScoped<IAnswerOptionService, AnswerOptionService>();
 builder.Services.AddScoped<IFormProcessService, FormProcessService>();
+builder.Services.AddScoped<IFormQuestionService, FormQuestionService>();
 
 builder.Services.AddControllers();
 
@@ -35,7 +37,7 @@ builder.Services.AddSwaggerGen(c =>
 
         // Users Groups
         // Include controllers with specific group names
-        var allowedGroups = new[] {"Questions", "Processes", "Forms", "Answers", "AnswerOptions", "FormProcessess"};
+        var allowedGroups = new[] {"Questions", "Processes", "Forms", "Answers", "AnswerOptions", "FormProcessess", "FormQuestions"};
         return allowedGroups.Contains(apiDesc.GroupName);
 
 
