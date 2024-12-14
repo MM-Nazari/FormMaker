@@ -77,7 +77,6 @@ namespace FormMaker.Service
             _context.Questions.Add(question);
             await _context.SaveChangesAsync();
 
-            // Map the created entity back to DTO
             var createdQuestionDto = new QuestionDTO
             {
                 QuestionID = question.QuestionID,
@@ -112,7 +111,6 @@ namespace FormMaker.Service
             _context.Questions.Update(question);
             await _context.SaveChangesAsync();
 
-            // Map the updated entity back to DTO
             var updatedQuestionDto = new QuestionDTO
             {
                 QuestionID = question.QuestionID,

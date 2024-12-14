@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register services (including TestService)
 builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IProcessService, ProcessService>();
 
 builder.Services.AddControllers();
 
@@ -30,7 +31,7 @@ builder.Services.AddSwaggerGen(c =>
 
         // Users Groups
         // Include controllers with specific group names
-        var allowedGroups = new[] {"Questions"};
+        var allowedGroups = new[] {"Questions", "Processes"};
         return allowedGroups.Contains(apiDesc.GroupName);
 
 
