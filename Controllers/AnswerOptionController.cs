@@ -31,16 +31,16 @@ namespace FormMaker.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAnswerOption([FromBody] AnswerOptionDto answerOptionDto)
+        public async Task<IActionResult> CreateAnswerOption([FromBody] AnswerOptionCreateDto answerOptionCreateDto)
         {
-            var response = await _answerOptionService.CreateAnswerOptionAsync(answerOptionDto);
+            var response = await _answerOptionService.CreateAnswerOptionAsync(answerOptionCreateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAnswerOption(int id, [FromBody] AnswerOptionDto answerOptionDto)
+        public async Task<IActionResult> UpdateAnswerOption(int id, [FromBody] AnswerOptionUpdateDto answerOptionUpdateDto)
         {
-            var response = await _answerOptionService.UpdateAnswerOptionAsync(id, answerOptionDto);
+            var response = await _answerOptionService.UpdateAnswerOptionAsync(id, answerOptionUpdateDto);
             return StatusCode(response.StatusCode, response);
         }
 

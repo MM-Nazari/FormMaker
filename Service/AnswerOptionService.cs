@@ -25,7 +25,9 @@ namespace FormMaker.Service
                     OptionID = ao.OptionID,
                     QuestionID = ao.QuestionID,
                     OptionText = ao.OptionText,
-                    Priority = ao.Priority
+                    Priority = ao.Priority,
+                    CreatedAtJalali = Jalali.ToJalali(ao.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(ao.UpdatedAt)
                 })
                 .ToListAsync();
 
@@ -41,7 +43,9 @@ namespace FormMaker.Service
                     OptionID = ao.OptionID,
                     QuestionID = ao.QuestionID,
                     OptionText = ao.OptionText,
-                    Priority = ao.Priority
+                    Priority = ao.Priority,
+                    CreatedAtJalali = Jalali.ToJalali(ao.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(ao.UpdatedAt)
                 })
                 .FirstOrDefaultAsync();
 
@@ -51,13 +55,13 @@ namespace FormMaker.Service
             return new ApiResponse<AnswerOptionDto>(true, ResponseMessage.AnswerOptionRetrieved, answerOption, 200);
         }
 
-        public async Task<ApiResponse<AnswerOptionDto>> CreateAnswerOptionAsync(AnswerOptionDto answerOptionDto)
+        public async Task<ApiResponse<AnswerOptionDto>> CreateAnswerOptionAsync(AnswerOptionCreateDto answerOptionCreateDto)
         {
             var answerOption = new AnswerOption
             {
-                QuestionID = answerOptionDto.QuestionID,
-                OptionText = answerOptionDto.OptionText,
-                Priority = answerOptionDto.Priority,
+                QuestionID = answerOptionCreateDto.QuestionID,
+                OptionText = answerOptionCreateDto.OptionText,
+                Priority = answerOptionCreateDto.Priority,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false
@@ -66,31 +70,34 @@ namespace FormMaker.Service
             _context.AnswerOptions.Add(answerOption);
             await _context.SaveChangesAsync();
 
-            answerOptionDto.OptionID = answerOption.OptionID;
+            //answerOptionDto.OptionID = answerOption.OptionID;
+            //answerOptionDto.CreatedAtJalali = Jalali.ToJalali(answerOption.CreatedAt);
+            //answerOptionDto.UpdatedAtJalali = Jalali.ToJalali(answerOption.UpdatedAt);
 
-            return new ApiResponse<AnswerOptionDto>(true, ResponseMessage.AnswerOptionCreated, answerOptionDto, 201);
+            return new ApiResponse<AnswerOptionDto>(true, ResponseMessage.AnswerOptionCreated, null, 201);
         }
 
-        public async Task<ApiResponse<AnswerOptionDto>> UpdateAnswerOptionAsync(int id, AnswerOptionDto answerOptionDto)
+        public async Task<ApiResponse<AnswerOptionDto>> UpdateAnswerOptionAsync(int id, AnswerOptionUpdateDto answerOptionUpdateDto)
         {
-            var answerOption = await _context.AnswerOptions.FirstOrDefaultAsync(ao => ao.OptionID == id);
+            var answerOption = await _context.AnswerOptions.FirstOrDefaultAsync(ao => ao.OptionID == id && !ao.IsDeleted);
 
             if (answerOption == null)
                 return new ApiResponse<AnswerOptionDto>(false, ResponseMessage.AnswerOptionNotFound, null, 404);
 
-            answerOption.OptionText = answerOptionDto.OptionText;
-            answerOption.Priority = answerOptionDto.Priority;
+
+            answerOption.OptionText = answerOptionUpdateDto.OptionText;
+            answerOption.Priority = answerOptionUpdateDto.Priority;
             answerOption.UpdatedAt = DateTime.UtcNow;
 
             _context.AnswerOptions.Update(answerOption);
             await _context.SaveChangesAsync();
 
-            return new ApiResponse<AnswerOptionDto>(true, ResponseMessage.AnswerOptionUpdated, answerOptionDto, 200);
+            return new ApiResponse<AnswerOptionDto>(true, ResponseMessage.AnswerOptionUpdated, null, 200);
         }
 
         public async Task<ApiResponse<bool>> DeleteAnswerOptionAsync(int id)
         {
-            var answerOption = await _context.AnswerOptions.FirstOrDefaultAsync(ao => ao.OptionID == id);
+            var answerOption = await _context.AnswerOptions.FirstOrDefaultAsync(ao => ao.OptionID == id && !ao.IsDeleted);
 
             if (answerOption == null)
                 return new ApiResponse<bool>(false, ResponseMessage.AnswerOptionNotFound, false, 404);

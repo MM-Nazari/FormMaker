@@ -1,4 +1,7 @@
-﻿namespace FormMaker.Model
+﻿using FormMaker.Util;
+using System.Globalization;
+
+namespace FormMaker.Model
 {
     public class AnswerOption
     {
@@ -14,5 +17,6 @@
         // Relations
         public Question Question { get; set; }
         public ICollection<Answer> Answers { get; set; }
+
     }
 }

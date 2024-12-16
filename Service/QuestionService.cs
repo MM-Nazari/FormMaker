@@ -9,7 +9,6 @@ namespace FormMaker.Service
 {
     public class QuestionService : IQuestionService
     {
-        // Assuming a database context is injected here
         private readonly FormMakerDbContext _context;
 
         public QuestionService(FormMakerDbContext context)
