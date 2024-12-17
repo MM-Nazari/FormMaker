@@ -18,7 +18,7 @@ namespace FormMaker.Service
             _context = context;
         }
 
-        public async Task<ApiResponse<ProcessDto>> CreateProcessAsync(ProcessCreateUpdateDto processCreateUpdateDto)
+        public async Task<ApiResponse<ProcessDto>> CreateProcessAsync(ProcessCreateDto processCreateUpdateDto)
         {
             var process = new Model.Process
             {
@@ -86,18 +86,18 @@ namespace FormMaker.Service
             return new ApiResponse<List<ProcessDto>>(true, ResponseMessage.ProcessRetrieved, processes, 200);
         }
 
-        public async Task<ApiResponse<ProcessDto>> UpdateProcessAsync(int processId, ProcessCreateUpdateDto processCreateUpdateDto)
+        public async Task<ApiResponse<ProcessDto>> UpdateProcessAsync(ProcessUpdateDto processUpdateDto)
         {
             var process = await _context.Processes
-                .FirstOrDefaultAsync(p => p.ProcessID == processId && !p.IsDeleted);
+                .FirstOrDefaultAsync(p => p.ProcessID == processUpdateDto.ProcessID && !p.IsDeleted);
 
             if (process == null)
             {
                 return new ApiResponse<ProcessDto>(false, ResponseMessage.ProcessNotFound, null, 404);
             }
 
-            process.ProcessTitle = processCreateUpdateDto.ProcessTitle;
-            process.ProcessDescription = processCreateUpdateDto.ProcessDescription;
+            process.ProcessTitle = processUpdateDto.ProcessTitle;
+            process.ProcessDescription = processUpdateDto.ProcessDescription;
             process.UpdatedAt = DateTime.UtcNow;
 
             _context.Processes.Update(process);

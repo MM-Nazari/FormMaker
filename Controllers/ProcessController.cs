@@ -17,7 +17,7 @@ namespace FormMaker.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProcess([FromBody] ProcessCreateUpdateDto processCreateDto)
+        public async Task<IActionResult> CreateProcess([FromBody] ProcessCreateDto processCreateDto)
         {
             var response = await _processService.CreateProcessAsync(processCreateDto);
             return StatusCode(response.StatusCode, response);
@@ -37,10 +37,10 @@ namespace FormMaker.Controllers
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProcess(int id, [FromBody] ProcessCreateUpdateDto processCreateUpdateDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateProcess([FromBody] ProcessUpdateDto processUpdateDto)
         {
-            var response = await _processService.UpdateProcessAsync(id, processCreateUpdateDto);
+            var response = await _processService.UpdateProcessAsync(processUpdateDto);
             return StatusCode(response.StatusCode, response);
         }
 

@@ -86,9 +86,9 @@ namespace FormMaker.Service
             return new ApiResponse<AnswerOptionDto>(true, ResponseMessage.AnswerOptionCreated, answerOptionDto, 201);
         }
 
-        public async Task<ApiResponse<AnswerOptionDto>> UpdateAnswerOptionAsync(int id, AnswerOptionUpdateDto answerOptionUpdateDto)
+        public async Task<ApiResponse<AnswerOptionDto>> UpdateAnswerOptionAsync(AnswerOptionUpdateDto answerOptionUpdateDto)
         {
-            var answerOption = await _context.AnswerOptions.FirstOrDefaultAsync(ao => ao.OptionID == id && !ao.IsDeleted);
+            var answerOption = await _context.AnswerOptions.FirstOrDefaultAsync(ao => ao.OptionID == answerOptionUpdateDto.OptionID && !ao.IsDeleted);
 
             if (answerOption == null)
                 return new ApiResponse<AnswerOptionDto>(false, ResponseMessage.AnswerOptionNotFound, null, 404);

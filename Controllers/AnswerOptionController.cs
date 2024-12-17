@@ -39,10 +39,10 @@ namespace FormMaker.Controllers
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAnswerOption(int id, [FromBody] AnswerOptionUpdateDto answerOptionUpdateDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateAnswerOption([FromBody] AnswerOptionUpdateDto answerOptionUpdateDto)
         {
-            var response = await _answerOptionService.UpdateAnswerOptionAsync(id, answerOptionUpdateDto);
+            var response = await _answerOptionService.UpdateAnswerOptionAsync(answerOptionUpdateDto);
             return StatusCode(response.StatusCode, response);
         }
 
