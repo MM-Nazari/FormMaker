@@ -28,7 +28,10 @@ namespace FormMaker.Service
                     AnswerOptionID = a.AnswerOptionID,
                     FilePath = a.FilePath,
                     IsCaptchaSolved = a.IsCaptchaSolved,
-                    CaptchaAnswer = a.CaptchaAnswer
+                    CaptchaAnswer = a.CaptchaAnswer,
+                    CreatedAtJalali = Jalali.ToJalali(a.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(a.UpdatedAt),
+                    IsDeleted = a.IsDeleted
                 })
                 .ToListAsync();
 
@@ -47,7 +50,10 @@ namespace FormMaker.Service
                     AnswerOptionID = a.AnswerOptionID,
                     FilePath = a.FilePath,
                     IsCaptchaSolved = a.IsCaptchaSolved,
-                    CaptchaAnswer = a.CaptchaAnswer
+                    CaptchaAnswer = a.CaptchaAnswer,
+                    CreatedAtJalali = Jalali.ToJalali(a.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(a.UpdatedAt),
+                    IsDeleted = a.IsDeleted
                 })
                 .FirstOrDefaultAsync();
 
@@ -57,16 +63,16 @@ namespace FormMaker.Service
             return new ApiResponse<AnswerDto>(true, ResponseMessage.AnswerRetrieved, answer, 200);
         }
 
-        public async Task<ApiResponse<AnswerDto>> CreateAnswerAsync(AnswerDto answerDto)
+        public async Task<ApiResponse<AnswerDto>> CreateAnswerAsync(AnswerCreateDto answerCreateDto)
         {
             var answer = new Answer
             {
-                FormQuestionProcessID = answerDto.FormQuestionProcessID,
-                AnswerText = answerDto.AnswerText,
-                AnswerOptionID = answerDto.AnswerOptionID,
-                FilePath = answerDto.FilePath,
-                IsCaptchaSolved = answerDto.IsCaptchaSolved,
-                CaptchaAnswer = answerDto.CaptchaAnswer,
+                FormQuestionProcessID = answerCreateDto.FormQuestionProcessID,
+                AnswerText = answerCreateDto.AnswerText,
+                AnswerOptionID = answerCreateDto.AnswerOptionID,
+                FilePath = answerCreateDto.FilePath,
+                IsCaptchaSolved = answerCreateDto.IsCaptchaSolved,
+                CaptchaAnswer = answerCreateDto.CaptchaAnswer,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false
@@ -75,27 +81,53 @@ namespace FormMaker.Service
             _context.Answers.Add(answer);
             await _context.SaveChangesAsync();
 
-            answerDto.AnswerID = answer.AnswerID;
+            var answerDto = new AnswerDto
+            {
+                AnswerID = answer.AnswerID,
+                FormQuestionProcessID = answer.FormQuestionProcessID,
+                AnswerText = answer.AnswerText,
+                AnswerOptionID = answer.AnswerOptionID,
+                FilePath = answer.FilePath,
+                IsCaptchaSolved = answer.IsCaptchaSolved,
+                CaptchaAnswer = answer.CaptchaAnswer,
+                CreatedAtJalali = Jalali.ToJalali(answer.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(answer.UpdatedAt),
+                IsDeleted = answer.IsDeleted
+            };
 
             return new ApiResponse<AnswerDto>(true, ResponseMessage.AnswerCreated, answerDto, 201);
         }
 
-        public async Task<ApiResponse<AnswerDto>> UpdateAnswerAsync(int id, AnswerDto answerDto)
+        public async Task<ApiResponse<AnswerDto>> UpdateAnswerAsync(AnswerUpdateDto answerUpdateDto)
         {
-            var answer = await _context.Answers.FirstOrDefaultAsync(a => a.AnswerID == id);
+            var answer = await _context.Answers.FirstOrDefaultAsync(a => a.AnswerID == answerUpdateDto.AnswerID);
 
             if (answer == null)
                 return new ApiResponse<AnswerDto>(false, ResponseMessage.AnswerNotFound, null, 404);
 
-            answer.AnswerText = answerDto.AnswerText;
-            answer.AnswerOptionID = answerDto.AnswerOptionID;
-            answer.FilePath = answerDto.FilePath;
-            answer.IsCaptchaSolved = answerDto.IsCaptchaSolved;
-            answer.CaptchaAnswer = answerDto.CaptchaAnswer;
+            answer.AnswerText = answerUpdateDto.AnswerText;
+            answer.AnswerOptionID = answerUpdateDto.AnswerOptionID;
+            answer.FilePath = answerUpdateDto.FilePath;
+            answer.IsCaptchaSolved = answerUpdateDto.IsCaptchaSolved;
+            answer.CaptchaAnswer = answerUpdateDto.CaptchaAnswer;
             answer.UpdatedAt = DateTime.UtcNow;
 
             _context.Answers.Update(answer);
             await _context.SaveChangesAsync();
+
+            var answerDto = new AnswerDto
+            {
+                AnswerID = answer.AnswerID,
+                FormQuestionProcessID = answer.FormQuestionProcessID,
+                AnswerText = answer.AnswerText,
+                AnswerOptionID = answer.AnswerOptionID,
+                FilePath = answer.FilePath,
+                IsCaptchaSolved = answer.IsCaptchaSolved,
+                CaptchaAnswer = answer.CaptchaAnswer,
+                CreatedAtJalali = Jalali.ToJalali(answer.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(answer.UpdatedAt),
+                IsDeleted = answer.IsDeleted
+            };
 
             return new ApiResponse<AnswerDto>(true, ResponseMessage.AnswerUpdated, answerDto, 200);
         }

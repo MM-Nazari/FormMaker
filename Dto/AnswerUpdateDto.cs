@@ -1,6 +1,6 @@
 ﻿namespace FormMaker.Dto
 {
-    public class AnswerDto
+    public class AnswerUpdateDto
     {
         public int AnswerID { get; set; }
         public int FormQuestionProcessID { get; set; }
@@ -9,10 +9,5 @@
         public string FilePath { get; set; }
         public bool? IsCaptchaSolved { get; set; }
         public string CaptchaAnswer { get; set; }
-
-        public string CreatedAtJalali { get; set; }
-        public string UpdatedAtJalali { get; set; }
-
-        public bool IsDeleted { get; set; } = false;
     }
 }
