@@ -50,5 +50,12 @@ namespace FormMaker.Controllers
             var response = await _formService.DeleteFormAsync(id);
             return StatusCode(response.StatusCode, response);
         }
+
+        [HttpGet("frequent")]
+        public async Task<IActionResult> GetFrequentForms()
+        {
+            var response = await _formService.GetFrequentFormsAsync();
+            return StatusCode(response.StatusCode, response);
+        }
     }
 }

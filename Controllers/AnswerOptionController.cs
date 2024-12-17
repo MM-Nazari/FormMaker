@@ -52,5 +52,12 @@ namespace FormMaker.Controllers
             var response = await _answerOptionService.DeleteAnswerOptionAsync(id);
             return StatusCode(response.StatusCode, response);
         }
+
+        [HttpGet("question/{questionId}")]
+        public async Task<IActionResult> GetAnswerOptionsByQuestionId(int questionId)
+        {
+            var response = await _answerOptionService.GetAnswerOptionsByQuestionIdAsync(questionId);
+            return StatusCode(response.StatusCode, response);
+        }
     }
 }

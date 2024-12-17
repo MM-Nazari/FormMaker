@@ -10,5 +10,6 @@ namespace FormMaker.Interface
         Task<ApiResponse<AnswerOptionDto>> CreateAnswerOptionAsync(AnswerOptionCreateDto answerOptionCreateDto);
         Task<ApiResponse<AnswerOptionDto>> UpdateAnswerOptionAsync(AnswerOptionUpdateDto answerOptionUpdateDto);
         Task<ApiResponse<bool>> DeleteAnswerOptionAsync(int id);
+        Task<ApiResponse<IEnumerable<AnswerOptionDto>>> GetAnswerOptionsByQuestionIdAsync(int questionId);
     }
 }

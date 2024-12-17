@@ -133,5 +133,24 @@ namespace FormMaker.Service
 
             return new ApiResponse<bool>(true, ResponseMessage.FormDeleted, true, 200);
         }
+
+        public async Task<ApiResponse<IEnumerable<FormDto>>> GetFrequentFormsAsync()
+        {
+            var frequentForms = await _context.Forms
+                .Where(f => f.IsFrequent && !f.IsDeleted)
+                .Select(f => new FormDto
+                {
+                    FormID = f.FormID,
+                    FormTitle = f.FormTitle,
+                    FormDescription = f.FormDescription,
+                    IsFrequent = f.IsFrequent,
+                    CreatedAtJalali = Jalali.ToJalali(f.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(f.UpdatedAt),
+                    IsDeleted = f.IsDeleted
+                })
+                .ToListAsync();
+
+            return new ApiResponse<IEnumerable<FormDto>>(true, ResponseMessage.FormRetrieved, frequentForms, 200);
+        }
     }
 }

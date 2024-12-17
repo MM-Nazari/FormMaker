@@ -50,5 +50,12 @@ namespace FormMaker.Controllers
             var response = await _formProcessService.DeleteFormProcessAsync(id);
             return StatusCode(response.StatusCode, response);
         }
+
+        [HttpGet("{processId}/forms")]
+        public async Task<IActionResult> GetFormsByProcessId(int processId)
+        {
+            var response = await _formProcessService.GetFormsByProcessIdAsync(processId);
+            return StatusCode(response.StatusCode, response);
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace FormMaker.Interface
         Task<ApiResponse<FormQuestionDto>> CreateFormQuestionAsync(FormQuestionCreateDto formQuestionCreateDto);
         Task<ApiResponse<FormQuestionDto>> UpdateFormQuestionAsync(FormQuestionUpdateDto formQuestionUpdateDto);
         Task<ApiResponse<bool>> DeleteFormQuestionAsync(int formQuestionId);
+        Task<ApiResponse<IEnumerable<QuestionDto>>> GetQuestionsByFormIdAsync(int formId);
     }
 }

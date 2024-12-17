@@ -133,5 +133,36 @@ namespace FormMaker.Service
 
             return new ApiResponse<bool>(true, ResponseMessage.FormQuestionProcessDeleted, true, 200);
         }
+
+        public async Task<ApiResponse<IEnumerable<AnswerDto>>> GetAnswersByProcessIdAsync(int processId)
+        {
+            // Retrieve answers for the given process ID
+            var answers = await _context.FormQuestionProcesses
+                .Where(fpq => fpq.FormProcess.ProcessID == processId && !fpq.IsDeleted)
+                .SelectMany(fpq => _context.Answers
+                    .Where(a => a.FormQuestionProcessID == fpq.FormQuestionProcessID && !a.IsDeleted)
+                    .Select(a => new AnswerDto
+                    {
+                        AnswerID = a.AnswerID,
+                        FormQuestionProcessID = a.FormQuestionProcessID,
+                        AnswerText = a.AnswerText,
+                        AnswerOptionID = a.AnswerOptionID,
+                        FilePath = a.FilePath,
+                        IsCaptchaSolved = a.IsCaptchaSolved,
+                        CaptchaAnswer = a.CaptchaAnswer,
+                        CreatedAtJalali = Jalali.ToJalali(a.CreatedAt),
+                        UpdatedAtJalali = Jalali.ToJalali(a.UpdatedAt),
+                        IsDeleted = a.IsDeleted
+                    })
+                )
+                .ToListAsync();
+
+            if (!answers.Any())
+            {
+                return new ApiResponse<IEnumerable<AnswerDto>>(false, ResponseMessage.AnswerNotFound, null, 404);
+            }
+
+            return new ApiResponse<IEnumerable<AnswerDto>>(true, ResponseMessage.AnswerRetrieved, answers, 200);
+        }
     }
 }

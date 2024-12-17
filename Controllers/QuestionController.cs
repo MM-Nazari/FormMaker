@@ -1,5 +1,6 @@
 ﻿using FormMaker.Dto;
 using FormMaker.Interface;
+using FormMaker.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormMaker.Controllers
@@ -58,5 +59,13 @@ namespace FormMaker.Controllers
                 return NoContent();
             return NotFound(response);
         }
+
+        [HttpGet("frequent")]
+        public async Task<IActionResult> GetFrequentQuestions()
+        {
+            var response = await _questionService.GetFrequentQuestionsAsync();
+            return StatusCode(response.StatusCode, response);
+        }
+
     }
 }

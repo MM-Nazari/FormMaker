@@ -141,5 +141,24 @@ namespace FormMaker.Service
 
             return new ApiResponse<bool>(true, ResponseMessage.QuestionDeleted, true, 200);
         }
+
+        public async Task<ApiResponse<IEnumerable<QuestionDto>>> GetFrequentQuestionsAsync()
+        {
+            var questions = await _context.Questions
+                .Where(q => q.IsFrequent && !q.IsDeleted)
+                .Select(q => new QuestionDto
+                {
+                    QuestionID = q.QuestionID,
+                    QuestionTitle = q.QuestionTitle,
+                    ValidationRule = q.ValidationRule,
+                    IsFrequent = q.IsFrequent,
+                    CreatedAtJalali = Jalali.ToJalali(q.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(q.UpdatedAt),
+                    IsDeleted = q.IsDeleted
+                })
+                .ToListAsync();
+
+            return new ApiResponse<IEnumerable<QuestionDto>>(true, ResponseMessage.QuestionRetrieved, questions, 200);
+        }
     }
 }

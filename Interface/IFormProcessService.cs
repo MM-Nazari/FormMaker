@@ -10,5 +10,6 @@ namespace FormMaker.Interface
         Task<ApiResponse<FormProcessDto>> CreateFormProcessAsync(FormProcessCreateDto formProcessCreateDto);
         Task<ApiResponse<FormProcessDto>> UpdateFormProcessAsync(FormProcessUpdateDto formProcessUpdateDto);
         Task<ApiResponse<bool>> DeleteFormProcessAsync(int formProcessId);
+        Task<ApiResponse<IEnumerable<FormDto>>> GetFormsByProcessIdAsync(int processId);
     }
 }

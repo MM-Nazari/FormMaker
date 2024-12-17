@@ -127,5 +127,29 @@ namespace FormMaker.Service
 
             return new ApiResponse<bool>(true, ResponseMessage.AnswerOptionDeleted, true, 200);
         }
+
+        public async Task<ApiResponse<IEnumerable<AnswerOptionDto>>> GetAnswerOptionsByQuestionIdAsync(int questionId)
+        {
+            var answerOptions = await _context.AnswerOptions
+                .Where(ao => ao.QuestionID == questionId && !ao.IsDeleted)
+                .Select(ao => new AnswerOptionDto
+                {
+                    OptionID = ao.OptionID,
+                    QuestionID = ao.QuestionID,
+                    OptionText = ao.OptionText,
+                    Priority = ao.Priority,
+                    CreatedAtJalali = Jalali.ToJalali(ao.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(ao.UpdatedAt),
+                    IsDeleted = ao.IsDeleted
+                })
+                .ToListAsync();
+
+            if (!answerOptions.Any())
+            {
+                return new ApiResponse<IEnumerable<AnswerOptionDto>>(false, ResponseMessage.AnswerOptionNotFound, null, 404);
+            }
+
+            return new ApiResponse<IEnumerable<AnswerOptionDto>>(true, ResponseMessage.AnswerOptionRetrieved, answerOptions, 200);
+        }
     }
 }

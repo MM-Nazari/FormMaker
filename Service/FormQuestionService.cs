@@ -144,5 +144,30 @@ namespace FormMaker.Service
 
             return new ApiResponse<bool>(true, ResponseMessage.FormQuestionDeleted, true, 200);
         }
+
+        public async Task<ApiResponse<IEnumerable<QuestionDto>>> GetQuestionsByFormIdAsync(int formId)
+        {
+            var questions = await _context.FormQuestions
+                .Where(fq => fq.FormID == formId && !fq.IsDeleted)
+                .Select(fq => new QuestionDto
+                {
+                    QuestionID = fq.Question.QuestionID,
+                    QuestionTitle = fq.Question.QuestionTitle,
+                    QuestionType = fq.Question.QuestionType,
+                    ValidationRule = fq.Question.ValidationRule,
+                    IsFrequent = fq.Question.IsFrequent,
+                    CreatedAtJalali = Jalali.ToJalali(fq.Question.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(fq.Question.UpdatedAt),
+                    IsDeleted = fq.Question.IsDeleted
+                })
+                .ToListAsync();
+
+            if (!questions.Any())
+            {
+                return new ApiResponse<IEnumerable<QuestionDto>>(false, ResponseMessage.QuestionNotFound, null, 404);
+            }
+
+            return new ApiResponse<IEnumerable<QuestionDto>>(true, ResponseMessage.QuestionRetrieved, questions, 200);
+        }
     }
 }
