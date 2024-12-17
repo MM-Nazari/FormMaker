@@ -26,7 +26,10 @@ namespace FormMaker.Service
                     FormID = f.FormID,
                     FormTitle = f.FormTitle,
                     FormDescription = f.FormDescription,
-                    IsFrequent = f.IsFrequent
+                    IsFrequent = f.IsFrequent,
+                    CreatedAtJalali = Jalali.ToJalali(f.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(f.UpdatedAt),
+                    IsDeleted = f.IsDeleted
                 })
                 .ToListAsync();
 
@@ -42,7 +45,10 @@ namespace FormMaker.Service
                     FormID = f.FormID,
                     FormTitle = f.FormTitle,
                     FormDescription = f.FormDescription,
-                    IsFrequent = f.IsFrequent
+                    IsFrequent = f.IsFrequent,
+                    CreatedAtJalali = Jalali.ToJalali(f.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(f.UpdatedAt),
+                    IsDeleted = f.IsDeleted
                 })
             .FirstOrDefaultAsync();
 
@@ -53,41 +59,62 @@ namespace FormMaker.Service
             return new ApiResponse<FormDto>(true, ResponseMessage.FormRetrieved, form, 200);
         }
 
-        public async Task<ApiResponse<FormDto>> CreateFormAsync(FormDto formDto)
+        public async Task<ApiResponse<FormDto>> CreateFormAsync(FormCreateDto formCraeteDto)
         {
             var form = new Form
             {
-                FormTitle = formDto.FormTitle,
-                FormDescription = formDto.FormDescription,
+                FormTitle = formCraeteDto.FormTitle,
+                FormDescription = formCraeteDto.FormDescription,
+                IsFrequent = formCraeteDto.IsFrequent,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
-                IsDeleted = false,
-                IsFrequent = formDto.IsFrequent
+                IsDeleted = false
             };
 
             _context.Forms.Add(form);
             await _context.SaveChangesAsync();
 
-            formDto.FormID = form.FormID;
+            var formDto = new FormDto
+            {
+                FormID = form.FormID,
+                FormTitle = form.FormTitle,
+                FormDescription = form.FormDescription,
+                IsFrequent = form.IsFrequent,
+                CreatedAtJalali = Jalali.ToJalali(form.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(form.UpdatedAt),
+                IsDeleted = form.IsDeleted
+            };
+
             return new ApiResponse<FormDto>(true, ResponseMessage.FormCreated, formDto, 201);
         }
 
-        public async Task<ApiResponse<FormDto>> UpdateFormAsync(int formId, FormDto formDto)
+        public async Task<ApiResponse<FormDto>> UpdateFormAsync(FormUpdateDto formUpdateDto)
         {
-            var form = await _context.Forms.FirstOrDefaultAsync(f => f.FormID == formId && !f.IsDeleted);
+            var form = await _context.Forms.FirstOrDefaultAsync(f => f.FormID == formUpdateDto.FormID && !f.IsDeleted);
 
             if (form == null)
             {
                 return new ApiResponse<FormDto>(false, ResponseMessage.FormNotFound, null, 404);
             }
 
-            form.FormTitle = formDto.FormTitle;
-            form.FormDescription = formDto.FormDescription;
+            form.FormTitle = formUpdateDto.FormTitle;
+            form.FormDescription = formUpdateDto.FormDescription;
             form.UpdatedAt = DateTime.UtcNow;
-            form.IsFrequent = formDto.IsFrequent;
+            form.IsFrequent = formUpdateDto.IsFrequent;
 
             _context.Forms.Update(form);
             await _context.SaveChangesAsync();
+
+            var formDto = new FormDto
+            {
+                FormID = form.FormID,
+                FormTitle = form.FormTitle,
+                FormDescription = form.FormDescription,
+                IsFrequent = form.IsFrequent,
+                CreatedAtJalali = Jalali.ToJalali(form.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(form.UpdatedAt),
+                IsDeleted = form.IsDeleted
+            };
 
             return new ApiResponse<FormDto>(true, ResponseMessage.FormUpdated, formDto, 200);
         }

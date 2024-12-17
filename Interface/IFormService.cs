@@ -7,8 +7,8 @@ namespace FormMaker.Interface
     {
         Task<ApiResponse<IEnumerable<FormDto>>> GetAllFormsAsync();
         Task<ApiResponse<FormDto>> GetFormByIdAsync(int formId);
-        Task<ApiResponse<FormDto>> CreateFormAsync(FormDto formDto);
-        Task<ApiResponse<FormDto>> UpdateFormAsync(int formId, FormDto formDto);
+        Task<ApiResponse<FormDto>> CreateFormAsync(FormCreateDto formCreateDto);
+        Task<ApiResponse<FormDto>> UpdateFormAsync(FormUpdateDto formUpdateDto);
         Task<ApiResponse<bool>> DeleteFormAsync(int formId);
     }
 }
