@@ -70,11 +70,17 @@ namespace FormMaker.Service
             _context.AnswerOptions.Add(answerOption);
             await _context.SaveChangesAsync();
 
-            //answerOptionDto.OptionID = answerOption.OptionID;
-            //answerOptionDto.CreatedAtJalali = Jalali.ToJalali(answerOption.CreatedAt);
-            //answerOptionDto.UpdatedAtJalali = Jalali.ToJalali(answerOption.UpdatedAt);
+            var answerOptionDto = new AnswerOptionDto
+            {
+                OptionID = answerOption.OptionID,
+                QuestionID = answerOption.QuestionID,
+                OptionText = answerOption.OptionText,
+                Priority = answerOption.Priority,
+                CreatedAtJalali = Jalali.ToJalali(answerOption.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(answerOption.UpdatedAt)
+            };
 
-            return new ApiResponse<AnswerOptionDto>(true, ResponseMessage.AnswerOptionCreated, null, 201);
+            return new ApiResponse<AnswerOptionDto>(true, ResponseMessage.AnswerOptionCreated, answerOptionDto, 201);
         }
 
         public async Task<ApiResponse<AnswerOptionDto>> UpdateAnswerOptionAsync(int id, AnswerOptionUpdateDto answerOptionUpdateDto)
@@ -92,7 +98,17 @@ namespace FormMaker.Service
             _context.AnswerOptions.Update(answerOption);
             await _context.SaveChangesAsync();
 
-            return new ApiResponse<AnswerOptionDto>(true, ResponseMessage.AnswerOptionUpdated, null, 200);
+            var answerOptionDto = new AnswerOptionDto
+            {
+                OptionID = answerOption.OptionID,
+                QuestionID = answerOption.QuestionID,
+                OptionText = answerOption.OptionText,
+                Priority = answerOption.Priority,
+                CreatedAtJalali = Jalali.ToJalali(answerOption.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(answerOption.UpdatedAt)
+            };
+
+            return new ApiResponse<AnswerOptionDto>(true, ResponseMessage.AnswerOptionUpdated, answerOptionDto, 200);
         }
 
         public async Task<ApiResponse<bool>> DeleteAnswerOptionAsync(int id)

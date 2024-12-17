@@ -17,6 +17,8 @@ namespace FormMaker.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllAnswerOptions()
         {
             var response = await _answerOptionService.GetAllAnswerOptionsAsync();
