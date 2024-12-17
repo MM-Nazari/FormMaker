@@ -4,6 +4,7 @@ using FormMaker.Interface;
 using FormMaker.Model;
 using FormMaker.Util;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.WebRequestMethods;
 
 namespace FormMaker.Service
 {
@@ -24,7 +25,10 @@ namespace FormMaker.Service
                 {
                     FormQuestionProcessID = fqp.FormQuestionProcessID,
                     FormQuestionID = fqp.FormQuestionID,
-                    FormProcessID = fqp.FormProcessID
+                    FormProcessID = fqp.FormProcessID,
+                    CreatedAtJalali = Jalali.ToJalali(fqp.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(fqp.UpdatedAt),
+                    IsDeleted = fqp.IsDeleted
                 })
                 .ToListAsync();
 
@@ -39,7 +43,10 @@ namespace FormMaker.Service
                 {
                     FormQuestionProcessID = fqp.FormQuestionProcessID,
                     FormQuestionID = fqp.FormQuestionID,
-                    FormProcessID = fqp.FormProcessID
+                    FormProcessID = fqp.FormProcessID,
+                    CreatedAtJalali = Jalali.ToJalali(fqp.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(fqp.UpdatedAt),
+                    IsDeleted = fqp.IsDeleted
                 })
                 .FirstOrDefaultAsync();
 
@@ -51,12 +58,12 @@ namespace FormMaker.Service
             return new ApiResponse<FormQuestionProcessDto>(true, ResponseMessage.FormQuestionProcessRetrieved, formQuestionProcess, 200);
         }
 
-        public async Task<ApiResponse<FormQuestionProcessDto>> CreateFormQuestionProcessAsync(FormQuestionProcessDto formQuestionProcessDto)
+        public async Task<ApiResponse<FormQuestionProcessDto>> CreateFormQuestionProcessAsync(FormQuestionProcessCreateDto formQuestionProcessCreateDto)
         {
             var formQuestionProcess = new FormQuestionProcess
             {
-                FormQuestionID = formQuestionProcessDto.FormQuestionID,
-                FormProcessID = formQuestionProcessDto.FormProcessID,
+                FormQuestionID = formQuestionProcessCreateDto.FormQuestionID,
+                FormProcessID = formQuestionProcessCreateDto.FormProcessID,
                 IsDeleted = false,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -65,27 +72,45 @@ namespace FormMaker.Service
             _context.FormQuestionProcesses.Add(formQuestionProcess);
             await _context.SaveChangesAsync();
 
-            formQuestionProcessDto.FormQuestionProcessID = formQuestionProcess.FormQuestionProcessID;
+            var formQuestionProcessDto = new FormQuestionProcessDto
+            {
+                FormQuestionProcessID = formQuestionProcess.FormQuestionProcessID,
+                FormQuestionID = formQuestionProcess.FormQuestionID,
+                FormProcessID = formQuestionProcess.FormProcessID,
+                CreatedAtJalali = Jalali.ToJalali(formQuestionProcess.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(formQuestionProcess.UpdatedAt),
+                IsDeleted = formQuestionProcess.IsDeleted
+            };
 
             return new ApiResponse<FormQuestionProcessDto>(true, ResponseMessage.FormQuestionProcessCreated, formQuestionProcessDto, 201);
         }
 
-        public async Task<ApiResponse<FormQuestionProcessDto>> UpdateFormQuestionProcessAsync(int formQuestionProcessId, FormQuestionProcessDto formQuestionProcessDto)
+        public async Task<ApiResponse<FormQuestionProcessDto>> UpdateFormQuestionProcessAsync(FormQuestionProcessUpdateDto formQuestionProcessUpdateDto)
         {
             var formQuestionProcess = await _context.FormQuestionProcesses
-                .FirstOrDefaultAsync(fqp => fqp.FormQuestionProcessID == formQuestionProcessId && !fqp.IsDeleted);
+                .FirstOrDefaultAsync(fqp => fqp.FormQuestionProcessID == formQuestionProcessUpdateDto.FormQuestionProcessID && !fqp.IsDeleted);
 
             if (formQuestionProcess == null)
             {
                 return new ApiResponse<FormQuestionProcessDto>(false, ResponseMessage.FormQuestionProcessNotFound, null, 404);
             }
 
-            formQuestionProcess.FormQuestionID = formQuestionProcessDto.FormQuestionID;
-            formQuestionProcess.FormProcessID = formQuestionProcessDto.FormProcessID;
+            formQuestionProcess.FormQuestionID = formQuestionProcessUpdateDto.FormQuestionID;
+            formQuestionProcess.FormProcessID = formQuestionProcessUpdateDto.FormProcessID;
             formQuestionProcess.UpdatedAt = DateTime.UtcNow;
 
             _context.FormQuestionProcesses.Update(formQuestionProcess);
             await _context.SaveChangesAsync();
+
+            var formQuestionProcessDto = new FormQuestionProcessDto
+            {
+                FormQuestionProcessID = formQuestionProcess.FormQuestionProcessID,
+                FormQuestionID = formQuestionProcess.FormQuestionID,
+                FormProcessID = formQuestionProcess.FormProcessID,
+                CreatedAtJalali = Jalali.ToJalali(formQuestionProcess.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(formQuestionProcess.UpdatedAt),
+                IsDeleted = formQuestionProcess.IsDeleted
+            };
 
             return new ApiResponse<FormQuestionProcessDto>(true, ResponseMessage.FormQuestionProcessUpdated, formQuestionProcessDto, 200);
         }

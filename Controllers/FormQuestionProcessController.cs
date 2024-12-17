@@ -31,16 +31,16 @@ namespace FormMaker.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateFormQuestionProcess([FromBody] FormQuestionProcessDto formQuestionProcessDto)
+        public async Task<IActionResult> CreateFormQuestionProcess([FromBody] FormQuestionProcessCreateDto formQuestionProcessCreateDto)
         {
-            var response = await _service.CreateFormQuestionProcessAsync(formQuestionProcessDto);
+            var response = await _service.CreateFormQuestionProcessAsync(formQuestionProcessCreateDto);
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFormQuestionProcess(int id, [FromBody] FormQuestionProcessDto formQuestionProcessDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateFormQuestionProcess([FromBody] FormQuestionProcessUpdateDto formQuestionProcessUpdateDto)
         {
-            var response = await _service.UpdateFormQuestionProcessAsync(id, formQuestionProcessDto);
+            var response = await _service.UpdateFormQuestionProcessAsync(formQuestionProcessUpdateDto);
             return StatusCode(response.StatusCode, response);
         }
 

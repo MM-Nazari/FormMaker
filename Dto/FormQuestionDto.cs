@@ -11,6 +11,6 @@
         public string CreatedAtJalali { get; set; }
         public string UpdatedAtJalali { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }
