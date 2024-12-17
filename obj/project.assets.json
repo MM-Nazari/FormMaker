@@ -9496,19 +9496,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\M.Nazari\\.nuget\\packages\\": {}
+    "C:\\Users\\S.Niknam\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\M.Nazari\\source\\repos\\FormMaker\\FormMaker.csproj",
+      "projectUniqueName": "D:\\Repos\\formmaker\\FormMaker.csproj",
       "projectName": "FormMaker",
-      "projectPath": "C:\\Users\\M.Nazari\\source\\repos\\FormMaker\\FormMaker.csproj",
-      "packagesPath": "C:\\Users\\M.Nazari\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\M.Nazari\\source\\repos\\FormMaker\\obj\\",
+      "projectPath": "D:\\Repos\\formmaker\\FormMaker.csproj",
+      "packagesPath": "C:\\Users\\S.Niknam\\.nuget\\packages\\",
+      "outputPath": "D:\\Repos\\formmaker\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\M.Nazari\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\S.Niknam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -9516,7 +9521,8 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://pkgs.dev.azure.com/farahmandian/_packaging/JingetFeed/nuget/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
@@ -9528,7 +9534,13 @@
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "all"
+      },
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -9588,8 +9600,30 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.206/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.Net.Http' 4.3.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-7jgj-8wvc-jh57",
+      "libraryId": "System.Net.Http",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.Text.RegularExpressions' 4.3.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-cmhx-cq75-c4mj",
+      "libraryId": "System.Text.RegularExpressions",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }
