@@ -27,8 +27,9 @@ namespace FormMaker.Service
                     QuestionID = fq.QuestionID,
                     QuestionOrder = fq.QuestionOrder,
                     IsRequired = fq.IsRequired,
-                    CreatedAt = fq.CreatedAt,
-                    UpdatedAt = fq.UpdatedAt
+                    CreatedAtJalali = Jalali.ToJalali(fq.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(fq.UpdatedAt),
+                    IsDeleted = fq.IsDeleted
                 })
             .ToListAsync();
 
@@ -46,8 +47,9 @@ namespace FormMaker.Service
                     QuestionID = fq.QuestionID,
                     QuestionOrder = fq.QuestionOrder,
                     IsRequired = fq.IsRequired,
-                    CreatedAt = fq.CreatedAt,
-                    UpdatedAt = fq.UpdatedAt
+                    CreatedAtJalali = Jalali.ToJalali(fq.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(fq.UpdatedAt),
+                    IsDeleted = fq.IsDeleted
                 })
             .FirstOrDefaultAsync();
 
@@ -59,14 +61,14 @@ namespace FormMaker.Service
             return new ApiResponse<FormQuestionDto>(true, ResponseMessage.FormQuestionRetrieved, formQuestion, 200);
         }
 
-        public async Task<ApiResponse<FormQuestionDto>> CreateFormQuestionAsync(FormQuestionDto formQuestionDto)
+        public async Task<ApiResponse<FormQuestionDto>> CreateFormQuestionAsync(FormQuestionCreateDto formQuestionCreateDto)
         {
             var formQuestion = new FormQuestion
             {
-                FormID = formQuestionDto.FormID,
-                QuestionID = formQuestionDto.QuestionID,
-                QuestionOrder = formQuestionDto.QuestionOrder,
-                IsRequired = formQuestionDto.IsRequired,
+                FormID = formQuestionCreateDto.FormID,
+                QuestionID = formQuestionCreateDto.QuestionID,
+                QuestionOrder = formQuestionCreateDto.QuestionOrder,
+                IsRequired = formQuestionCreateDto.IsRequired,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false
@@ -75,28 +77,51 @@ namespace FormMaker.Service
             _context.FormQuestions.Add(formQuestion);
             await _context.SaveChangesAsync();
 
-            formQuestionDto.FormQuestionID = formQuestion.FormQuestionID;
+            var formQuestionDto = new FormQuestionDto
+            {
+                FormQuestionID = formQuestion.FormQuestionID,
+                FormID = formQuestion.FormID,
+                QuestionID = formQuestion.QuestionID,
+                QuestionOrder = formQuestion.QuestionOrder,
+                IsRequired = formQuestion.IsRequired,
+                CreatedAtJalali = Jalali.ToJalali(formQuestion.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(formQuestion.UpdatedAt),
+                IsDeleted = formQuestion.IsDeleted
+            };
+
             return new ApiResponse<FormQuestionDto>(true, ResponseMessage.FormQuestionCreated, formQuestionDto, 201);
         }
 
-        public async Task<ApiResponse<FormQuestionDto>> UpdateFormQuestionAsync(int formQuestionId, FormQuestionDto formQuestionDto)
+        public async Task<ApiResponse<FormQuestionDto>> UpdateFormQuestionAsync(FormQuestionUpdateDto formQuestionUpdateDto)
         {
             var formQuestion = await _context.FormQuestions
-                .FirstOrDefaultAsync(fq => fq.FormQuestionID == formQuestionId && !fq.IsDeleted);
+                .FirstOrDefaultAsync(fq => fq.FormQuestionID == formQuestionUpdateDto.FormQuestionID && !fq.IsDeleted);
 
             if (formQuestion == null)
             {
                 return new ApiResponse<FormQuestionDto>(false, ResponseMessage.FormQuestionNotFound, null, 404);
             }
 
-            formQuestion.FormID = formQuestionDto.FormID;
-            formQuestion.QuestionID = formQuestionDto.QuestionID;
-            formQuestion.QuestionOrder = formQuestionDto.QuestionOrder;
-            formQuestion.IsRequired = formQuestionDto.IsRequired;
+            formQuestion.FormID = formQuestionUpdateDto.FormID;
+            formQuestion.QuestionID = formQuestionUpdateDto.QuestionID;
+            formQuestion.QuestionOrder = formQuestionUpdateDto.QuestionOrder;
+            formQuestion.IsRequired = formQuestionUpdateDto.IsRequired;
             formQuestion.UpdatedAt = DateTime.UtcNow;
 
             _context.FormQuestions.Update(formQuestion);
             await _context.SaveChangesAsync();
+
+            var formQuestionDto = new FormQuestionDto
+            {
+                FormQuestionID = formQuestion.FormQuestionID,
+                FormID = formQuestion.FormID,
+                QuestionID = formQuestion.QuestionID,
+                QuestionOrder = formQuestion.QuestionOrder,
+                IsRequired = formQuestion.IsRequired,
+                CreatedAtJalali = Jalali.ToJalali(formQuestion.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(formQuestion.UpdatedAt),
+                IsDeleted = formQuestion.IsDeleted
+            };
 
             return new ApiResponse<FormQuestionDto>(true, ResponseMessage.FormQuestionUpdated, formQuestionDto, 200);
         }
