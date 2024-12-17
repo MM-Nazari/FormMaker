@@ -16,113 +16,113 @@ namespace FormMaker.Service
             _context = context;
         }
 
-        public async Task<ApiResponse<QuestionDTO>> GetQuestionByIdAsync(int questionId)
+        public async Task<ApiResponse<QuestionDto>> GetQuestionByIdAsync(int questionId)
         {
             var question = await _context.Questions
                 .Where(q => q.QuestionID == questionId)
-                .Select(q => new QuestionDTO
+                .Select(q => new QuestionDto
                 {
                     QuestionID = q.QuestionID,
                     QuestionTitle = q.QuestionTitle,
                     QuestionType = q.QuestionType,
                     ValidationRule = q.ValidationRule,
-                    CreatedAt = q.CreatedAt,
-                    UpdatedAt = q.UpdatedAt,
-                    IsDeleted = q.IsDeleted,
-                    IsFrequent = q.IsFrequent
+                    IsFrequent = q.IsFrequent,
+                    CreatedAtJalali = Jalali.ToJalali(q.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(q.UpdatedAt),
+                    IsDeleted = q.IsDeleted
                 })
                 .FirstOrDefaultAsync();
 
             if (question == null)
             {
-                return new ApiResponse<QuestionDTO>(false, ResponseMessage.QuestionNotFound, null, 404);
+                return new ApiResponse<QuestionDto>(false, ResponseMessage.QuestionNotFound, null, 404);
             }
 
-            return new ApiResponse<QuestionDTO>(true, ResponseMessage.QuestionRetrieved, question, 200);
+            return new ApiResponse<QuestionDto>(true, ResponseMessage.QuestionRetrieved, question, 200);
         }
 
-        public async Task<ApiResponse<IEnumerable<QuestionDTO>>> GetAllQuestionsAsync()
+        public async Task<ApiResponse<IEnumerable<QuestionDto>>> GetAllQuestionsAsync()
         {
             var questions = await _context.Questions
-                .Select(q => new QuestionDTO
+                .Select(q => new QuestionDto
                 {
                     QuestionID = q.QuestionID,
                     QuestionTitle = q.QuestionTitle,
                     QuestionType = q.QuestionType,
                     ValidationRule = q.ValidationRule,
-                    CreatedAt = q.CreatedAt,
-                    UpdatedAt = q.UpdatedAt,
-                    IsDeleted = q.IsDeleted,
-                    IsFrequent = q.IsFrequent
+                    IsFrequent = q.IsFrequent,
+                    CreatedAtJalali = Jalali.ToJalali(q.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(q.UpdatedAt),
+                    IsDeleted = q.IsDeleted
                 })
                 .ToListAsync();
 
-            return new ApiResponse<IEnumerable<QuestionDTO>>(true, ResponseMessage.QuestionRetrieved, questions, 200);
+            return new ApiResponse<IEnumerable<QuestionDto>>(true, ResponseMessage.QuestionRetrieved, questions, 200);
         }
 
-        public async Task<ApiResponse<QuestionDTO>> CreateQuestionAsync(QuestionDTO questionDto)
+        public async Task<ApiResponse<QuestionDto>> CreateQuestionAsync(QuestionCreateDto questionCreateDto)
         {
             var question = new Question
             {
-                QuestionTitle = questionDto.QuestionTitle,
-                QuestionType = questionDto.QuestionType,
-                ValidationRule = questionDto.ValidationRule,
+                QuestionTitle = questionCreateDto.QuestionTitle,
+                QuestionType = questionCreateDto.QuestionType,
+                ValidationRule = questionCreateDto.ValidationRule,
+                IsFrequent = questionCreateDto.IsFrequent,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
-                IsDeleted = false,
-                IsFrequent = questionDto.IsFrequent
+                IsDeleted = false
             };
 
             _context.Questions.Add(question);
             await _context.SaveChangesAsync();
 
-            var createdQuestionDto = new QuestionDTO
+            var questionDto = new QuestionDto
             {
                 QuestionID = question.QuestionID,
                 QuestionTitle = question.QuestionTitle,
                 QuestionType = question.QuestionType,
                 ValidationRule = question.ValidationRule,
-                CreatedAt = question.CreatedAt,
-                UpdatedAt = question.UpdatedAt,
-                IsDeleted = question.IsDeleted,
-                IsFrequent = question.IsFrequent
+                IsFrequent = question.IsFrequent,
+                CreatedAtJalali = Jalali.ToJalali(question.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(question.UpdatedAt),
+                IsDeleted = question.IsDeleted
             };
 
-            return new ApiResponse<QuestionDTO>(true, ResponseMessage.QuestionCreated, createdQuestionDto, 201);
+            return new ApiResponse<QuestionDto>(true, ResponseMessage.QuestionCreated, questionDto, 201);
         }
 
-        public async Task<ApiResponse<QuestionDTO>> UpdateQuestionAsync(int questionId, QuestionDTO questionDto)
+        public async Task<ApiResponse<QuestionDto>> UpdateQuestionAsync(QuestionUpdateDto questionUpdateDto)
         {
             var question = await _context.Questions
-                .FirstOrDefaultAsync(q => q.QuestionID == questionId);
+                .FirstOrDefaultAsync(q => q.QuestionID == questionUpdateDto.QuestionID);
 
             if (question == null)
             {
-                return new ApiResponse<QuestionDTO>(false, ResponseMessage.QuestionNotFound, null, 404);
+                return new ApiResponse<QuestionDto>(false, ResponseMessage.QuestionNotFound, null, 404);
             }
 
-            question.QuestionTitle = questionDto.QuestionTitle;
-            question.QuestionType = questionDto.QuestionType;
-            question.ValidationRule = questionDto.ValidationRule;
+            question.QuestionTitle = questionUpdateDto.QuestionTitle;
+            question.QuestionType = questionUpdateDto.QuestionType;
+            question.ValidationRule = questionUpdateDto.ValidationRule;
+            question.IsFrequent = questionUpdateDto.IsFrequent;
             question.UpdatedAt = DateTime.UtcNow;
-            question.IsFrequent = questionDto.IsFrequent;
 
             _context.Questions.Update(question);
             await _context.SaveChangesAsync();
 
-            var updatedQuestionDto = new QuestionDTO
+            var questionDto = new QuestionDto
             {
                 QuestionID = question.QuestionID,
                 QuestionTitle = question.QuestionTitle,
                 QuestionType = question.QuestionType,
                 ValidationRule = question.ValidationRule,
-                CreatedAt = question.CreatedAt,
-                UpdatedAt = question.UpdatedAt,
-                IsDeleted = question.IsDeleted,
-                IsFrequent = question.IsFrequent
+                IsFrequent = question.IsFrequent,
+                CreatedAtJalali = Jalali.ToJalali(question.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(question.UpdatedAt),
+                IsDeleted = question.IsDeleted
             };
 
-            return new ApiResponse<QuestionDTO>(true, ResponseMessage.QuestionUpdated, updatedQuestionDto, 200);
+            return new ApiResponse<QuestionDto>(true, ResponseMessage.QuestionUpdated, questionDto, 200);
         }
 
         public async Task<ApiResponse<bool>> DeleteQuestionAsync(int questionId)

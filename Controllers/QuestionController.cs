@@ -33,18 +33,18 @@ namespace FormMaker.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateQuestion([FromBody] QuestionDTO questionDto)
+        public async Task<IActionResult> CreateQuestion([FromBody] QuestionCreateDto questionCreateDto)
         {
-            var response = await _questionService.CreateQuestionAsync(questionDto);
+            var response = await _questionService.CreateQuestionAsync(questionCreateDto);
             if (response.Success)
                 return CreatedAtAction(nameof(GetQuestion), new { id = response.Data.QuestionID }, response);
             return BadRequest(response);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateQuestion(int id, [FromBody] QuestionDTO questionDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateQuestion([FromBody] QuestionUpdateDto questionUpdateDto)
         {
-            var response = await _questionService.UpdateQuestionAsync(id, questionDto);
+            var response = await _questionService.UpdateQuestionAsync(questionUpdateDto);
             if (response.Success)
                 return Ok(response);
             return NotFound(response);

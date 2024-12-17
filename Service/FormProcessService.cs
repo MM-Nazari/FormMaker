@@ -16,11 +16,11 @@ namespace FormMaker.Service
             _context = context;
         }
 
-        public async Task<ApiResponse<IEnumerable<FormProcessDTO>>> GetAllFormProcessesAsync()
+        public async Task<ApiResponse<IEnumerable<FormProcessDto>>> GetAllFormProcessesAsync()
         {
             var formProcesses = await _context.FormProcesses
                 .Where(fp => !fp.IsDeleted)
-                .Select(fp => new FormProcessDTO
+                .Select(fp => new FormProcessDto
                 {
                     FormProcessID = fp.FormProcessID,
                     FormID = fp.FormID,
@@ -32,14 +32,14 @@ namespace FormMaker.Service
                 })
                 .ToListAsync();
 
-            return new ApiResponse<IEnumerable<FormProcessDTO>>(true, ResponseMessage.FormProcessRetrieved, formProcesses, 200);
+            return new ApiResponse<IEnumerable<FormProcessDto>>(true, ResponseMessage.FormProcessRetrieved, formProcesses, 200);
         }
 
-        public async Task<ApiResponse<FormProcessDTO>> GetFormProcessByIdAsync(int formProcessId)
+        public async Task<ApiResponse<FormProcessDto>> GetFormProcessByIdAsync(int formProcessId)
         {
             var formProcess = await _context.FormProcesses
                 .Where(fp => fp.FormProcessID == formProcessId && !fp.IsDeleted)
-                .Select(fp => new FormProcessDTO
+                .Select(fp => new FormProcessDto
                 {
                     FormProcessID = fp.FormProcessID,
                     FormID = fp.FormID,
@@ -53,13 +53,13 @@ namespace FormMaker.Service
 
             if (formProcess == null)
             {
-                return new ApiResponse<FormProcessDTO>(false, ResponseMessage.FormProcessNotFound, null, 404);
+                return new ApiResponse<FormProcessDto>(false, ResponseMessage.FormProcessNotFound, null, 404);
             }
 
-            return new ApiResponse<FormProcessDTO>(true, ResponseMessage.FormProcessRetrieved, formProcess, 200);
+            return new ApiResponse<FormProcessDto>(true, ResponseMessage.FormProcessRetrieved, formProcess, 200);
         }
 
-        public async Task<ApiResponse<FormProcessDTO>> CreateFormProcessAsync(FormProcessCreateDto formProcessCreateDto)
+        public async Task<ApiResponse<FormProcessDto>> CreateFormProcessAsync(FormProcessCreateDto formProcessCreateDto)
         {
             var formProcess = new FormProcess
             {
@@ -74,7 +74,7 @@ namespace FormMaker.Service
             _context.FormProcesses.Add(formProcess);
             await _context.SaveChangesAsync();
 
-            var formProcessDto = new FormProcessDTO
+            var formProcessDto = new FormProcessDto
             {
                 FormProcessID = formProcess.FormID,
                 FormID = formProcess.FormID,
@@ -85,17 +85,17 @@ namespace FormMaker.Service
                 IsDeleted = formProcess.IsDeleted
             };
 
-            return new ApiResponse<FormProcessDTO>(true, ResponseMessage.FormProcessCreated, formProcessDto, 201);
+            return new ApiResponse<FormProcessDto>(true, ResponseMessage.FormProcessCreated, formProcessDto, 201);
         }
 
-        public async Task<ApiResponse<FormProcessDTO>> UpdateFormProcessAsync(FormProcessUpdateDto formProcessUpdateDto)
+        public async Task<ApiResponse<FormProcessDto>> UpdateFormProcessAsync(FormProcessUpdateDto formProcessUpdateDto)
         {
             var formProcess = await _context.FormProcesses
                 .FirstOrDefaultAsync(fp => fp.FormProcessID == formProcessUpdateDto.FormProcessID && !fp.IsDeleted);
 
             if (formProcess == null)
             {
-                return new ApiResponse<FormProcessDTO>(false, ResponseMessage.FormProcessNotFound, null, 404);
+                return new ApiResponse<FormProcessDto>(false, ResponseMessage.FormProcessNotFound, null, 404);
             }
 
             formProcess.FormID = formProcessUpdateDto.FormID;
@@ -106,7 +106,7 @@ namespace FormMaker.Service
             _context.FormProcesses.Update(formProcess);
             await _context.SaveChangesAsync();
 
-            var formProcessDto = new FormProcessDTO
+            var formProcessDto = new FormProcessDto
             {
                 FormProcessID = formProcess.FormID,
                 FormID = formProcess.FormID,
@@ -117,7 +117,7 @@ namespace FormMaker.Service
                 IsDeleted = formProcess.IsDeleted
             };
 
-            return new ApiResponse<FormProcessDTO>(true, ResponseMessage.FormProcessUpdated, formProcessDto, 200);
+            return new ApiResponse<FormProcessDto>(true, ResponseMessage.FormProcessUpdated, formProcessDto, 200);
         }
 
         public async Task<ApiResponse<bool>> DeleteFormProcessAsync(int formProcessId)

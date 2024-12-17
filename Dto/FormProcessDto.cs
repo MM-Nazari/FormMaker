@@ -1,6 +1,6 @@
 ﻿namespace FormMaker.Dto
 {
-    public class FormProcessDTO
+    public class FormProcessDto
     {
         public int FormProcessID { get; set; }
         public int ProcessID { get; set; }
