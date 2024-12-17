@@ -27,7 +27,8 @@ namespace FormMaker.Service
                     OptionText = ao.OptionText,
                     Priority = ao.Priority,
                     CreatedAtJalali = Jalali.ToJalali(ao.CreatedAt),
-                    UpdatedAtJalali = Jalali.ToJalali(ao.UpdatedAt)
+                    UpdatedAtJalali = Jalali.ToJalali(ao.UpdatedAt),
+                    IsDeleted = ao.IsDeleted
                 })
                 .ToListAsync();
 
@@ -45,7 +46,8 @@ namespace FormMaker.Service
                     OptionText = ao.OptionText,
                     Priority = ao.Priority,
                     CreatedAtJalali = Jalali.ToJalali(ao.CreatedAt),
-                    UpdatedAtJalali = Jalali.ToJalali(ao.UpdatedAt)
+                    UpdatedAtJalali = Jalali.ToJalali(ao.UpdatedAt),
+                    IsDeleted = ao.IsDeleted
                 })
                 .FirstOrDefaultAsync();
 
@@ -77,7 +79,8 @@ namespace FormMaker.Service
                 OptionText = answerOption.OptionText,
                 Priority = answerOption.Priority,
                 CreatedAtJalali = Jalali.ToJalali(answerOption.CreatedAt),
-                UpdatedAtJalali = Jalali.ToJalali(answerOption.UpdatedAt)
+                UpdatedAtJalali = Jalali.ToJalali(answerOption.UpdatedAt),
+                IsDeleted = answerOption.IsDeleted
             };
 
             return new ApiResponse<AnswerOptionDto>(true, ResponseMessage.AnswerOptionCreated, answerOptionDto, 201);
@@ -105,7 +108,8 @@ namespace FormMaker.Service
                 OptionText = answerOption.OptionText,
                 Priority = answerOption.Priority,
                 CreatedAtJalali = Jalali.ToJalali(answerOption.CreatedAt),
-                UpdatedAtJalali = Jalali.ToJalali(answerOption.UpdatedAt)
+                UpdatedAtJalali = Jalali.ToJalali(answerOption.UpdatedAt),
+                IsDeleted = answerOption.IsDeleted
             };
 
             return new ApiResponse<AnswerOptionDto>(true, ResponseMessage.AnswerOptionUpdated, answerOptionDto, 200);

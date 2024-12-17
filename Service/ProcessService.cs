@@ -4,6 +4,8 @@ using FormMaker.Model;
 using FormMaker.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using FormMaker.Util;
+using System.Diagnostics;
+using System;
 
 namespace FormMaker.Service
 {
@@ -16,12 +18,12 @@ namespace FormMaker.Service
             _context = context;
         }
 
-        public async Task<ApiResponse<ProcessDto>> CreateProcessAsync(ProcessDto processDto)
+        public async Task<ApiResponse<ProcessDto>> CreateProcessAsync(ProcessCreateUpdateDto processCreateUpdateDto)
         {
-            var process = new Process
+            var process = new Model.Process
             {
-                ProcessTitle = processDto.ProcessTitle,
-                ProcessDescription = processDto.ProcessDescription,
+                ProcessTitle = processCreateUpdateDto.ProcessTitle,
+                ProcessDescription = processCreateUpdateDto.ProcessDescription,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false
@@ -30,7 +32,16 @@ namespace FormMaker.Service
             _context.Processes.Add(process);
             await _context.SaveChangesAsync();
 
-            processDto.ProcessID = process.ProcessID;
+            var processDto = new ProcessDto
+            {
+                ProcessID = process.ProcessID,
+                ProcessTitle = process.ProcessTitle,
+                ProcessDescription = process.ProcessDescription,
+                CreatedAtJalali = Jalali.ToJalali(process.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(process.UpdatedAt),
+                IsDeleted = process.IsDeleted
+            };
+
             return new ApiResponse<ProcessDto>(true, ResponseMessage.ProcessCreated, processDto, 201);
         }
 
@@ -49,8 +60,8 @@ namespace FormMaker.Service
                 ProcessID = process.ProcessID,
                 ProcessTitle = process.ProcessTitle,
                 ProcessDescription = process.ProcessDescription,
-                CreatedAt = process.CreatedAt,
-                UpdatedAt = process.UpdatedAt,
+                CreatedAtJalali = Jalali.ToJalali(process.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(process.UpdatedAt),
                 IsDeleted = process.IsDeleted
             };
 
@@ -66,8 +77,8 @@ namespace FormMaker.Service
                     ProcessID = p.ProcessID,
                     ProcessTitle = p.ProcessTitle,
                     ProcessDescription = p.ProcessDescription,
-                    CreatedAt = p.CreatedAt,
-                    UpdatedAt = p.UpdatedAt,
+                    CreatedAtJalali = Jalali.ToJalali(p.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(p.UpdatedAt),
                     IsDeleted = p.IsDeleted
                 })
             .ToListAsync();
@@ -75,7 +86,7 @@ namespace FormMaker.Service
             return new ApiResponse<List<ProcessDto>>(true, ResponseMessage.ProcessRetrieved, processes, 200);
         }
 
-        public async Task<ApiResponse<ProcessDto>> UpdateProcessAsync(int processId, ProcessDto processDto)
+        public async Task<ApiResponse<ProcessDto>> UpdateProcessAsync(int processId, ProcessCreateUpdateDto processCreateUpdateDto)
         {
             var process = await _context.Processes
                 .FirstOrDefaultAsync(p => p.ProcessID == processId && !p.IsDeleted);
@@ -85,12 +96,22 @@ namespace FormMaker.Service
                 return new ApiResponse<ProcessDto>(false, ResponseMessage.ProcessNotFound, null, 404);
             }
 
-            process.ProcessTitle = processDto.ProcessTitle;
-            process.ProcessDescription = processDto.ProcessDescription;
+            process.ProcessTitle = processCreateUpdateDto.ProcessTitle;
+            process.ProcessDescription = processCreateUpdateDto.ProcessDescription;
             process.UpdatedAt = DateTime.UtcNow;
 
             _context.Processes.Update(process);
             await _context.SaveChangesAsync();
+
+            var processDto = new ProcessDto
+            {
+                ProcessID = process.ProcessID,
+                ProcessTitle = process.ProcessTitle,
+                ProcessDescription = process.ProcessDescription,
+                CreatedAtJalali = Jalali.ToJalali(process.CreatedAt),
+                UpdatedAtJalali = Jalali.ToJalali(process.UpdatedAt),
+                IsDeleted = process.IsDeleted
+            };
 
             return new ApiResponse<ProcessDto>(true, ResponseMessage.ProcessUpdated, processDto, 200);
         }
