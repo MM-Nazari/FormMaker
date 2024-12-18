@@ -136,7 +136,6 @@ namespace FormMaker.Service
 
         public async Task<ApiResponse<IEnumerable<AnswerDto>>> GetAnswersByProcessIdAsync(int processId)
         {
-            // Retrieve answers for the given process ID
             var answers = await _context.FormQuestionProcesses
                 .Where(fpq => fpq.FormProcess.ProcessID == processId && !fpq.IsDeleted)
                 .SelectMany(fpq => _context.Answers
