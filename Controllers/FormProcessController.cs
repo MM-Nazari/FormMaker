@@ -53,9 +53,9 @@ namespace FormMaker.Controllers
         }
 
         [HttpGet("{processId}/forms")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<FormDto>>>> GetFormsByProcessId(int processId)
+        public async Task<IActionResult> GetFormsByProcessId(int processId)
         {
-            ApiResponse<IEnumerable<FormDto>> response = await _formProcessService.GetFormsByProcessIdAsync(processId);
+            var response = await _formProcessService.GetFormsByProcessIdAsync(processId);
             return StatusCode(response.StatusCode, response);
         }
     }
