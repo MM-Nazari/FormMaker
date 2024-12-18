@@ -143,5 +143,25 @@ namespace FormMaker.Controllers
             }
 
         }
+
+        [HttpPost("Form-to-Process")]
+        public async Task<ActionResult<ApiResponse<FormWithProcessDto>>> CreateFormWithProcess([FromBody] FormWithProcessCreateDto formWithProcessCreateDto)
+        {
+            try
+            {
+                ApiResponse<FormWithProcessDto> response = await _formService.CreateFormWithProcessAsync(formWithProcessCreateDto);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+        }
     }
 }

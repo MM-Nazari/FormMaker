@@ -44,6 +44,8 @@
         public const string FormProcessUpdated = "Form process updated successfully";
         public const string FormProcessDeleted = "Form process deleted successfully";
 
+        public const string FormLinkedProcess = "Form created and linked to process successfully";
+
         // Form Question
         public const string FormQuestionNotFound = "Form question not found";
         public const string FormQuestionRetrieved = "Form question retrieved successfully";
@@ -51,12 +53,17 @@
         public const string FormQuestionUpdated = "Form question updated successfully";
         public const string FormQuestionDeleted = "Form question deleted successfully";
 
+        public const string QuestionLinkedForn = "Question created and linked to form and process successfully";
+
         // FormQuestionProcess
         public const string FormQuestionProcessNotFound = "Form question process not found";
         public const string FormQuestionProcessRetrieved = "Form question process retrieved successfully";
         public const string FormQuestionProcessCreated = "Form question process created successfully";
         public const string FormQuestionProcessUpdated = "Form question process updated successfully";
         public const string FormQuestionProcessDeleted = "Form question process deleted successfully";
+
+        // Process <-> Form <-> Question
+        public const string FormWithProcessAndQuestionsCreated = "Process with Form and Questions has been created";
 
         // Internal Server Error 
         public const string InternalServerError = "Internal Server Error";

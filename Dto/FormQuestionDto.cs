@@ -12,5 +12,6 @@
         public string UpdatedAtJalali { get; set; }
 
         public bool IsDeleted { get; set; } = false;
+
     }
 }

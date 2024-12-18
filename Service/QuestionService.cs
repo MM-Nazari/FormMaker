@@ -160,5 +160,85 @@ namespace FormMaker.Service
 
             return new ApiResponse<IEnumerable<QuestionDto>>(true, ResponseMessage.QuestionRetrieved, questions, 200);
         }
+
+        public async Task<ApiResponse<FormQuestionProcessAllDto>> CreateQuestionAndLinkToFormAsync(CreateQuestionAndLinkToFormDto createDto)
+        {
+
+                // Step 1: Create the question
+                var question = new Question
+                {
+                    QuestionTitle = createDto.QuestionTitle,
+                    QuestionType = createDto.QuestionType,
+                    ValidationRule = createDto.ValidationRule,
+                    IsFrequent = createDto.IsFrequent,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    IsDeleted = false
+                };
+
+                _context.Questions.Add(question);
+                await _context.SaveChangesAsync();
+
+                // Step 2: Link the question to the form 
+                var formQuestion = new FormQuestion
+                {
+                    FormID = createDto.FormID,
+                    QuestionID = question.QuestionID,
+                    QuestionOrder = createDto.QuestionOrder,
+                    IsRequired = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    IsDeleted = false
+                };
+
+                _context.FormQuestions.Add(formQuestion);
+                await _context.SaveChangesAsync();
+
+                // Retrieve the FormProcess based on FormID and ProcessID
+                var formProcess = await _context.FormProcesses
+                    .Where(fp => fp.FormID == createDto.FormID && fp.ProcessID == createDto.ProcessID)
+                    .FirstOrDefaultAsync();
+
+                if (formProcess == null)
+                {
+                    return new ApiResponse<FormQuestionProcessAllDto>(
+                        false,
+                        ResponseMessage.FormProcessNotFound,
+                        null,
+                        StatusCodes.Status404NotFound
+                    );
+                }
+
+                // Step 3: Link the formQuestion to the process
+                var formQuestionProcess = new FormQuestionProcess
+                {
+                    FormQuestionID = formQuestion.FormQuestionID,
+                    FormProcessID = formProcess.FormProcessID,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    IsDeleted = false
+                };
+
+                _context.FormQuestionProcesses.Add(formQuestionProcess);
+                await _context.SaveChangesAsync();
+
+                // Step 4: Prepare the response DTO for FormQuestionProcess
+                var formQuestionProcessAllDto = new FormQuestionProcessAllDto
+                {
+                    FormQuestionProcessID = formQuestionProcess.FormQuestionProcessID,
+                    FormID = createDto.FormID,
+                    ProcessID = createDto.ProcessID,
+                    QuestionID = question.QuestionID,
+                    QuestionTitle = question.QuestionTitle,
+                    QuestionType = question.QuestionType,
+                    CreatedAtJalali = Jalali.ToJalali(formQuestionProcess.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(formQuestionProcess.UpdatedAt),
+                    IsDeleted = formQuestionProcess.IsDeleted
+                };
+
+                return new ApiResponse<FormQuestionProcessAllDto>(true, ResponseMessage.QuestionLinkedForn, formQuestionProcessAllDto, 201);
+
+
+        }
     }
 }

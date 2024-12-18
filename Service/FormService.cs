@@ -152,5 +152,61 @@ namespace FormMaker.Service
 
             return new ApiResponse<IEnumerable<FormDto>>(true, ResponseMessage.FormRetrieved, frequentForms, 200);
         }
+
+        public async Task<ApiResponse<FormWithProcessDto>> CreateFormWithProcessAsync(FormWithProcessCreateDto formWithProcessCreateDto)
+        {
+                // Step 1: Check if the process exists
+                var process = await _context.Processes.FindAsync(formWithProcessCreateDto.ProcessID);
+                if (process == null)
+                {
+                    return new ApiResponse<FormWithProcessDto>(false, ResponseMessage.ProcessNotFound, null, StatusCodes.Status404NotFound);
+                }
+
+                // Step 2: Create the form
+                var form = new Form
+                {
+                    FormTitle = formWithProcessCreateDto.FormTitle,
+                    FormDescription = formWithProcessCreateDto.FormDescription,
+                    IsFrequent = formWithProcessCreateDto.IsFrequent,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    IsDeleted = false
+                };
+
+                _context.Forms.Add(form);
+                await _context.SaveChangesAsync();
+
+                // Step 3: Create the FormProcess and link it to the form
+                var formProcess = new FormProcess
+                {
+                    FormID = form.FormID,
+                    ProcessID = formWithProcessCreateDto.ProcessID,
+                    Stage = formWithProcessCreateDto.Stage, 
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    IsDeleted = false
+                };
+
+                _context.FormProcesses.Add(formProcess);
+                await _context.SaveChangesAsync();
+
+                // Step 4: Prepare the response DTO
+                var formWithProcessDto = new FormWithProcessDto
+                {
+                    FormID = form.FormID,
+                    FormTitle = form.FormTitle,
+                    FormDescription = form.FormDescription,
+                    IsFrequent = form.IsFrequent,
+                    CreatedAtJalali = Jalali.ToJalali(form.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(form.UpdatedAt),
+                    IsDeleted = form.IsDeleted,
+                    ProcessID = formProcess.ProcessID,
+                    Stage = formProcess.Stage
+                };
+
+                return new ApiResponse<FormWithProcessDto>(true, ResponseMessage.FormLinkedProcess, formWithProcessDto, 201);
+
+        }
+
     }
 }

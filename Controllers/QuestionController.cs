@@ -153,5 +153,25 @@ namespace FormMaker.Controllers
 
         }
 
+        [HttpPost("Question-to-Form")]
+        public async Task<ActionResult<ApiResponse<FormQuestionProcessAllDto>>> CreateQuestionAndLinkToForm([FromBody] CreateQuestionAndLinkToFormDto createDto)
+        {
+            try
+            {
+                ApiResponse<FormQuestionProcessAllDto> response = await _questionService.CreateQuestionAndLinkToFormAsync(createDto);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+        }
+
     }
 }
