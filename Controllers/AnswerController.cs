@@ -1,5 +1,6 @@
 ﻿using FormMaker.Dto;
 using FormMaker.Interface;
+using FormMaker.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormMaker.Controllers
@@ -17,37 +18,37 @@ namespace FormMaker.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAnswers()
+        public async Task<ActionResult<ApiResponse<IEnumerable<AnswerDto>>>> GetAllAnswers()
         {
-            var response = await _answerService.GetAllAnswersAsync();
+            ApiResponse<IEnumerable<AnswerDto>> response = await _answerService.GetAllAnswersAsync();
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAnswerById(int id)
+        public async Task<ActionResult<ApiResponse<AnswerDto>>> GetAnswerById(int id)
         {
-            var response = await _answerService.GetAnswerByIdAsync(id);
+            ApiResponse<AnswerDto> response = await _answerService.GetAnswerByIdAsync(id);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAnswer([FromBody] AnswerCreateDto answerCreateDto)
+        public async Task<ActionResult<ApiResponse<AnswerDto>>> CreateAnswer([FromBody] AnswerCreateDto answerCreateDto)
         {
-            var response = await _answerService.CreateAnswerAsync(answerCreateDto);
+            ApiResponse<AnswerDto> response = await _answerService.CreateAnswerAsync(answerCreateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAnswer([FromBody] AnswerUpdateDto answerUpdateDto)
+        public async Task<ActionResult<ApiResponse<AnswerDto>>> UpdateAnswer([FromBody] AnswerUpdateDto answerUpdateDto)
         {
             var response = await _answerService.UpdateAnswerAsync(answerUpdateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAnswer(int id)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteAnswer(int id)
         {
-            var response = await _answerService.DeleteAnswerAsync(id);
+            ApiResponse<bool> response = await _answerService.DeleteAnswerAsync(id);
             return StatusCode(response.StatusCode, response);
         }
     }

@@ -18,37 +18,37 @@ namespace FormMaker.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllFormProcesses()
+        public async Task<ActionResult<ApiResponse<IEnumerable<FormProcessDto>>>> GetAllFormProcesses()
         {
-            var response = await _formProcessService.GetAllFormProcessesAsync();
+            ApiResponse<IEnumerable<FormProcessDto>> response = await _formProcessService.GetAllFormProcessesAsync();
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetFormProcessById(int id)
+        public async Task<ActionResult<ApiResponse<AnswerDto>>> GetFormProcessById(int id)
         {
-            var response = await _formProcessService.GetFormProcessByIdAsync(id);
+            ApiResponse<FormProcessDto> response = await _formProcessService.GetFormProcessByIdAsync(id);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateFormProcess([FromBody] FormProcessCreateDto formProcessCreateDto)
+        public async Task<ActionResult<ApiResponse<FormProcessDto>>> CreateFormProcess([FromBody] FormProcessCreateDto formProcessCreateDto)
         {
-            var response = await _formProcessService.CreateFormProcessAsync(formProcessCreateDto);
+            ApiResponse<FormProcessDto> response = await _formProcessService.CreateFormProcessAsync(formProcessCreateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateFormProcess([FromBody] FormProcessUpdateDto formProcessUpdateDto)
+        public async Task<ActionResult<ApiResponse<FormProcessDto>>> UpdateFormProcess([FromBody] FormProcessUpdateDto formProcessUpdateDto)
         {
             var response = await _formProcessService.UpdateFormProcessAsync(formProcessUpdateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFormProcess(int id)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteFormProcess(int id)
         {
-            var response = await _formProcessService.DeleteFormProcessAsync(id);
+            ApiResponse<bool> response = await _formProcessService.DeleteFormProcessAsync(id);
             return StatusCode(response.StatusCode, response);
         }
 
