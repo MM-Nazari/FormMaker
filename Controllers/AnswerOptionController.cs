@@ -1,5 +1,6 @@
 ﻿using FormMaker.Dto;
 using FormMaker.Interface;
+using FormMaker.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormMaker.Controllers
@@ -19,44 +20,44 @@ namespace FormMaker.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllAnswerOptions()
+        public async Task<ActionResult<ApiResponse<IEnumerable<AnswerOptionDto>>>> GetAllAnswerOptions()
         {
-            var response = await _answerOptionService.GetAllAnswerOptionsAsync();
+            ApiResponse<IEnumerable<AnswerOptionDto>> response = await _answerOptionService.GetAllAnswerOptionsAsync();
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAnswerOptionById(int id)
+        public async Task<ActionResult<ApiResponse<AnswerOptionDto>>> GetAnswerOptionById(int id)
         {
-            var response = await _answerOptionService.GetAnswerOptionByIdAsync(id);
+            ApiResponse<AnswerOptionDto> response = await _answerOptionService.GetAnswerOptionByIdAsync(id);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAnswerOption([FromBody] AnswerOptionCreateDto answerOptionCreateDto)
+        public async Task<ActionResult<ApiResponse<AnswerOptionDto>>> CreateAnswerOption([FromBody] AnswerOptionCreateDto answerOptionCreateDto)
         {
-            var response = await _answerOptionService.CreateAnswerOptionAsync(answerOptionCreateDto);
+            ApiResponse<AnswerOptionDto> response = await _answerOptionService.CreateAnswerOptionAsync(answerOptionCreateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAnswerOption([FromBody] AnswerOptionUpdateDto answerOptionUpdateDto)
+        public async Task<ActionResult<ApiResponse<AnswerOptionDto>>> UpdateAnswerOption([FromBody] AnswerOptionUpdateDto answerOptionUpdateDto)
         {
-            var response = await _answerOptionService.UpdateAnswerOptionAsync(answerOptionUpdateDto);
+            ApiResponse<AnswerOptionDto> response = await _answerOptionService.UpdateAnswerOptionAsync(answerOptionUpdateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAnswerOption(int id)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteAnswerOption(int id)
         {
-            var response = await _answerOptionService.DeleteAnswerOptionAsync(id);
+            ApiResponse<bool> response = await _answerOptionService.DeleteAnswerOptionAsync(id);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("question/{questionId}")]
-        public async Task<IActionResult> GetAnswerOptionsByQuestionId(int questionId)
+        public async Task<ActionResult<ApiResponse<IEnumerable<AnswerOptionDto>>>> GetAnswerOptionsByQuestionId(int questionId)
         {
-            var response = await _answerOptionService.GetAnswerOptionsByQuestionIdAsync(questionId);
+            ApiResponse<IEnumerable<AnswerOptionDto>> response = await _answerOptionService.GetAnswerOptionsByQuestionIdAsync(questionId);
             return StatusCode(response.StatusCode, response);
         }
     }

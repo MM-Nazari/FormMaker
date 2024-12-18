@@ -1,5 +1,6 @@
 ﻿using FormMaker.Dto;
 using FormMaker.Interface;
+using FormMaker.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormMaker.Controllers
@@ -52,9 +53,9 @@ namespace FormMaker.Controllers
         }
 
         [HttpGet("{processId}/forms")]
-        public async Task<IActionResult> GetFormsByProcessId(int processId)
+        public async Task<ActionResult<ApiResponse<IEnumerable<FormDto>>>> GetFormsByProcessId(int processId)
         {
-            var response = await _formProcessService.GetFormsByProcessIdAsync(processId);
+            ApiResponse<IEnumerable<FormDto>> response = await _formProcessService.GetFormsByProcessIdAsync(processId);
             return StatusCode(response.StatusCode, response);
         }
     }
