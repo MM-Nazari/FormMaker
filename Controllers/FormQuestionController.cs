@@ -1,5 +1,6 @@
 ﻿using FormMaker.Dto;
 using FormMaker.Interface;
+using FormMaker.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormMaker.Controllers
@@ -17,44 +18,44 @@ namespace FormMaker.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllFormQuestions()
+        public async Task<ActionResult<ApiResponse<IEnumerable<FormQuestionDto>>>> GetAllFormQuestions()
         {
-            var response = await _formQuestionService.GetAllFormQuestionsAsync();
+            ApiResponse<IEnumerable<FormQuestionDto>> response = await _formQuestionService.GetAllFormQuestionsAsync();
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetFormQuestionById(int id)
+        public async Task<ActionResult<ApiResponse<FormQuestionDto>>> GetFormQuestionById(int id)
         {
-            var response = await _formQuestionService.GetFormQuestionByIdAsync(id);
+            ApiResponse<FormQuestionDto> response = await _formQuestionService.GetFormQuestionByIdAsync(id);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateFormQuestion([FromBody] FormQuestionCreateDto formQuestionCreateDto)
+        public async Task<ActionResult<ApiResponse<FormQuestionDto>>> CreateFormQuestion([FromBody] FormQuestionCreateDto formQuestionCreateDto)
         {
-            var response = await _formQuestionService.CreateFormQuestionAsync(formQuestionCreateDto);
+            ApiResponse<FormQuestionDto> response = await _formQuestionService.CreateFormQuestionAsync(formQuestionCreateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateFormQuestion([FromBody] FormQuestionUpdateDto formQuestionUpdateDto)
+        public async Task<ActionResult<ApiResponse<FormQuestionDto>>> UpdateFormQuestion([FromBody] FormQuestionUpdateDto formQuestionUpdateDto)
         {
-            var response = await _formQuestionService.UpdateFormQuestionAsync(formQuestionUpdateDto);
+            ApiResponse<FormQuestionDto> response = await _formQuestionService.UpdateFormQuestionAsync(formQuestionUpdateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFormQuestion(int id)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteFormQuestion(int id)
         {
-            var response = await _formQuestionService.DeleteFormQuestionAsync(id);
+            ApiResponse<bool> response = await _formQuestionService.DeleteFormQuestionAsync(id);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("{formId}/questions")]
-        public async Task<IActionResult> GetQuestionsByFormId(int formId)
+        public async Task<ActionResult<ApiResponse<IEnumerable<QuestionDto>>>> GetQuestionsByFormId(int formId)
         {
-            var response = await _formQuestionService.GetQuestionsByFormIdAsync(formId);
+            ApiResponse<IEnumerable<QuestionDto>> response = await _formQuestionService.GetQuestionsByFormIdAsync(formId);
             return StatusCode(response.StatusCode, response);
         }
     }
