@@ -1,5 +1,6 @@
 ﻿using FormMaker.Dto;
 using FormMaker.Interface;
+using FormMaker.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormMaker.Controllers
@@ -17,37 +18,37 @@ namespace FormMaker.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProcess([FromBody] ProcessCreateDto processCreateDto)
+        public async Task<ActionResult<ApiResponse<ProcessDto>>> CreateProcess([FromBody] ProcessCreateDto processCreateDto)
         {
-            var response = await _processService.CreateProcessAsync(processCreateDto);
+            ApiResponse<ProcessDto> response = await _processService.CreateProcessAsync(processCreateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProcessById(int id)
+        public async Task<ActionResult<ApiResponse<ProcessDto>>> GetProcessById(int id)
         {
-            var response = await _processService.GetProcessByIdAsync(id);
+            ApiResponse<ProcessDto> response = await _processService.GetProcessByIdAsync(id);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProcesses()
+        public async Task<ActionResult<ApiResponse<List<ProcessDto>>>> GetAllProcesses()
         {
-            var response = await _processService.GetAllProcessesAsync();
+            ApiResponse<List<ProcessDto>> response = await _processService.GetAllProcessesAsync();
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateProcess([FromBody] ProcessUpdateDto processUpdateDto)
+        public async Task<ActionResult<ApiResponse<ProcessDto>>> UpdateProcess([FromBody] ProcessUpdateDto processUpdateDto)
         {
-            var response = await _processService.UpdateProcessAsync(processUpdateDto);
+            ApiResponse<ProcessDto> response = await _processService.UpdateProcessAsync(processUpdateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProcess(int id)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteProcess(int id)
         {
-            var response = await _processService.DeleteProcessAsync(id);
+            ApiResponse<bool> response = await _processService.DeleteProcessAsync(id);
             return StatusCode(response.StatusCode, response);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using FormMaker.Dto;
 using FormMaker.Interface;
+using FormMaker.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormMaker.Controllers
@@ -17,44 +18,44 @@ namespace FormMaker.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllForms()
+        public async Task<ActionResult<ApiResponse<IEnumerable<FormDto>>>> GetAllForms()
         {
-            var response = await _formService.GetAllFormsAsync();
+            ApiResponse<IEnumerable<FormDto>> response = await _formService.GetAllFormsAsync();
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetFormById(int id)
+        public async Task<ActionResult<ApiResponse<FormDto>>> GetFormById(int id)
         {
-            var response = await _formService.GetFormByIdAsync(id);
+            ApiResponse<FormDto> response = await _formService.GetFormByIdAsync(id);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateForm([FromBody] FormCreateDto formCreateDto)
+        public async Task<ActionResult<ApiResponse<FormDto>>> CreateForm([FromBody] FormCreateDto formCreateDto)
         {
-            var response = await _formService.CreateFormAsync(formCreateDto);
+            ApiResponse<FormDto> response = await _formService.CreateFormAsync(formCreateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateForm([FromBody] FormUpdateDto formUpdateDto)
+        public async Task<ActionResult<ApiResponse<FormDto>>> UpdateForm([FromBody] FormUpdateDto formUpdateDto)
         {
-            var response = await _formService.UpdateFormAsync(formUpdateDto);
+            ApiResponse<FormDto> response = await _formService.UpdateFormAsync(formUpdateDto);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteForm(int id)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteForm(int id)
         {
-            var response = await _formService.DeleteFormAsync(id);
+            ApiResponse<bool> response = await _formService.DeleteFormAsync(id);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("frequent")]
-        public async Task<IActionResult> GetFrequentForms()
+        public async Task<ActionResult<ApiResponse<IEnumerable<FormDto>>>> GetFrequentForms()
         {
-            var response = await _formService.GetFrequentFormsAsync();
+            ApiResponse<IEnumerable<FormDto>> response = await _formService.GetFrequentFormsAsync();
             return StatusCode(response.StatusCode, response);
         }
     }
