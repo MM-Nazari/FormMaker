@@ -57,5 +57,8 @@
         public const string FormQuestionProcessCreated = "Form question process created successfully";
         public const string FormQuestionProcessUpdated = "Form question process updated successfully";
         public const string FormQuestionProcessDeleted = "Form question process deleted successfully";
+
+        // Internal Server Error 
+        public const string InternalServerError = "Internal Server Error";
     }
 }

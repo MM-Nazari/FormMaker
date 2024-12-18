@@ -1,6 +1,7 @@
 ﻿using FormMaker.Dto;
 using FormMaker.Interface;
 using FormMaker.Model;
+using FormMaker.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormMaker.Controllers
@@ -20,43 +21,127 @@ namespace FormMaker.Controllers
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<FormDto>>>> GetAllForms()
         {
-            ApiResponse<IEnumerable<FormDto>> response = await _formService.GetAllFormsAsync();
-            return StatusCode(response.StatusCode, response);
+            try 
+            {
+                ApiResponse<IEnumerable<FormDto>> response = await _formService.GetAllFormsAsync();
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+            
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResponse<FormDto>>> GetFormById(int id)
         {
-            ApiResponse<FormDto> response = await _formService.GetFormByIdAsync(id);
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                ApiResponse<FormDto> response = await _formService.GetFormByIdAsync(id);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+
         }
 
         [HttpPost]
         public async Task<ActionResult<ApiResponse<FormDto>>> CreateForm([FromBody] FormCreateDto formCreateDto)
         {
-            ApiResponse<FormDto> response = await _formService.CreateFormAsync(formCreateDto);
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                ApiResponse<FormDto> response = await _formService.CreateFormAsync(formCreateDto);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+
         }
 
         [HttpPut]
         public async Task<ActionResult<ApiResponse<FormDto>>> UpdateForm([FromBody] FormUpdateDto formUpdateDto)
         {
-            ApiResponse<FormDto> response = await _formService.UpdateFormAsync(formUpdateDto);
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                ApiResponse<FormDto> response = await _formService.UpdateFormAsync(formUpdateDto);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteForm(int id)
         {
-            ApiResponse<bool> response = await _formService.DeleteFormAsync(id);
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                ApiResponse<bool> response = await _formService.DeleteFormAsync(id);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+
         }
 
         [HttpGet("frequent")]
         public async Task<ActionResult<ApiResponse<IEnumerable<FormDto>>>> GetFrequentForms()
         {
-            ApiResponse<IEnumerable<FormDto>> response = await _formService.GetFrequentFormsAsync();
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                ApiResponse<IEnumerable<FormDto>> response = await _formService.GetFrequentFormsAsync();
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+
         }
     }
 }

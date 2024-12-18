@@ -1,6 +1,7 @@
 ﻿using FormMaker.Dto;
 using FormMaker.Interface;
 using FormMaker.Model;
+using FormMaker.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormMaker.Controllers
@@ -20,43 +21,127 @@ namespace FormMaker.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResponse<FormQuestionProcessDto>>> GetFormQuestionProcess(int id)
         {
-            ApiResponse<FormQuestionProcessDto> response = await _formQuestionProcessService.GetFormQuestionProcessAsync(id);
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                ApiResponse<FormQuestionProcessDto> response = await _formQuestionProcessService.GetFormQuestionProcessAsync(id);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+
         }
 
         [HttpGet]
         public async Task<ActionResult<ApiResponse<List<FormQuestionProcessDto>>>> GetAllFormQuestionProcesses()
         {
-            ApiResponse<List<FormQuestionProcessDto>> response = await _formQuestionProcessService.GetAllFormQuestionProcessesAsync();
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                ApiResponse<List<FormQuestionProcessDto>> response = await _formQuestionProcessService.GetAllFormQuestionProcessesAsync();
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+
         }
 
         [HttpPost]
         public async Task<ActionResult<ApiResponse<FormQuestionProcessDto>>> CreateFormQuestionProcess([FromBody] FormQuestionProcessCreateDto formQuestionProcessCreateDto)
         {
-            ApiResponse<FormQuestionProcessDto> response = await _formQuestionProcessService.CreateFormQuestionProcessAsync(formQuestionProcessCreateDto);
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                ApiResponse<FormQuestionProcessDto> response = await _formQuestionProcessService.CreateFormQuestionProcessAsync(formQuestionProcessCreateDto);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+
         }
 
         [HttpPut]
         public async Task<ActionResult<ApiResponse<FormQuestionProcessDto>>> UpdateFormQuestionProcess([FromBody] FormQuestionProcessUpdateDto formQuestionProcessUpdateDto)
         {
-            ApiResponse<FormQuestionProcessDto> response = await _formQuestionProcessService.UpdateFormQuestionProcessAsync(formQuestionProcessUpdateDto);
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                ApiResponse<FormQuestionProcessDto> response = await _formQuestionProcessService.UpdateFormQuestionProcessAsync(formQuestionProcessUpdateDto);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteFormQuestionProcess(int id)
         {
-            ApiResponse<bool> response = await _formQuestionProcessService.DeleteFormQuestionProcessAsync(id);
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                ApiResponse<bool> response = await _formQuestionProcessService.DeleteFormQuestionProcessAsync(id);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+
         }
 
         [HttpGet("{processId}/answers")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<FormQuestionProcessDto>>>> GetAnswersByProcessId(int processId)
+        public async Task<ActionResult<ApiResponse<IEnumerable<AnswerDto>>>> GetAnswersByProcessId(int processId)
         {
-            ApiResponse<IEnumerable<FormQuestionProcessDto>> response = await _formQuestionProcessService.GetAnswersByProcessIdAsync(processId);
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                ApiResponse<IEnumerable<AnswerDto>> response = await _formQuestionProcessService.GetAnswersByProcessIdAsync(processId);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                ApiResponse<string> errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+
         }
     }
 }
