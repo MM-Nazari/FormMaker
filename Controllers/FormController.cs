@@ -61,6 +61,7 @@ namespace FormMaker.Controllers
         }
 
         [HttpPost]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<ActionResult<ApiResponse<FormDto>>> CreateForm([FromBody] FormCreateDto formCreateDto)
         {
             try

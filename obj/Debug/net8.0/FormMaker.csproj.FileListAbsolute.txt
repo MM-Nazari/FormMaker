@@ -169,7 +169,6 @@ C:\Users\M.Nazari\source\repos\FormMaker\obj\Debug\net8.0\refint\FormMaker.dll
 C:\Users\M.Nazari\source\repos\FormMaker\obj\Debug\net8.0\FormMaker.pdb
 C:\Users\M.Nazari\source\repos\FormMaker\obj\Debug\net8.0\FormMaker.genruntimeconfig.cache
 C:\Users\M.Nazari\source\repos\FormMaker\obj\Debug\net8.0\ref\FormMaker.dll
-C:\Users\M.Nazari\source\repos\FormMaker\obj\Debug\net8.0\FormMaker.csproj.CopyComplete
 D:\Repos\formmaker\bin\Debug\net8.0\appsettings.Development.json
 D:\Repos\formmaker\bin\Debug\net8.0\appsettings.json
 D:\Repos\formmaker\bin\Debug\net8.0\FormMaker.staticwebassets.endpoints.json
@@ -346,3 +345,4 @@ D:\Repos\formmaker\obj\Debug\net8.0\refint\FormMaker.dll
 D:\Repos\formmaker\obj\Debug\net8.0\FormMaker.pdb
 D:\Repos\formmaker\obj\Debug\net8.0\FormMaker.genruntimeconfig.cache
 D:\Repos\formmaker\obj\Debug\net8.0\ref\FormMaker.dll
+C:\Users\M.Nazari\source\repos\FormMaker\obj\Debug\net8.0\FormMaker.csproj.CopyComplete

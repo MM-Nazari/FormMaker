@@ -38,7 +38,7 @@ builder.Services.AddSwaggerGen(c =>
 
         // Users Groups
         // Include controllers with specific group names
-        var allowedGroups = new[] {"Questions", "Processes", "Forms", "Answers", "AnswerOptions", "FormProcessess", "FormQuestions", "FormQuestionProcesses"};
+        var allowedGroups = new[] {"Questions", "Processes", "Forms", "Answers", "AnswerOptions"/*, "FormProcessess", "FormQuestions", "FormQuestionProcesses"*/};
         return allowedGroups.Contains(apiDesc.GroupName);
 
 
