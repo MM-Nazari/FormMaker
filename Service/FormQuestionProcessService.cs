@@ -143,7 +143,7 @@ namespace FormMaker.Service
                     .Select(a => new AnswerDto
                     {
                         AnswerID = a.AnswerID,
-                        FormQuestionProcessID = a.FormQuestionProcessID,
+                        //FormQuestionProcessID = a.FormQuestionProcessID,
                         AnswerText = a.AnswerText,
                         AnswerOptionID = a.AnswerOptionID,
                         FilePath = a.FilePath,

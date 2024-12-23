@@ -3,7 +3,6 @@
     public class AnswerUpdateDto
     {
         public int AnswerID { get; set; }
-        public int FormQuestionProcessID { get; set; }
         public string AnswerText { get; set; }
         public int? AnswerOptionID { get; set; }
         public string FilePath { get; set; }

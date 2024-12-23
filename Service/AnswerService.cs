@@ -23,7 +23,9 @@ namespace FormMaker.Service
                 .Select(a => new AnswerDto
                 {
                     AnswerID = a.AnswerID,
-                    FormQuestionProcessID = a.FormQuestionProcessID,
+                    FormID = a.FormQuestionProcess.FormProcess.FormID,
+                    ProcessID = a.FormQuestionProcess.FormProcess.ProcessID,
+                    QuestionID = a.FormQuestionProcess.FormQuestion.QuestionID,
                     AnswerText = a.AnswerText,
                     AnswerOptionID = a.AnswerOptionID,
                     FilePath = a.FilePath,
@@ -45,7 +47,9 @@ namespace FormMaker.Service
                 .Select(a => new AnswerDto
                 {
                     AnswerID = a.AnswerID,
-                    FormQuestionProcessID = a.FormQuestionProcessID,
+                    FormID = a.FormQuestionProcess.FormProcess.FormID,
+                    ProcessID = a.FormQuestionProcess.FormProcess.ProcessID,
+                    QuestionID = a.FormQuestionProcess.FormQuestion.QuestionID,
                     AnswerText = a.AnswerText,
                     AnswerOptionID = a.AnswerOptionID,
                     FilePath = a.FilePath,
@@ -65,9 +69,39 @@ namespace FormMaker.Service
 
         public async Task<ApiResponse<AnswerDto>> CreateAnswerAsync(AnswerCreateDto answerCreateDto)
         {
+
+            var formQuestion = await _context.FormQuestions
+                .Where(fq => fq.QuestionID == answerCreateDto.QuestionID)
+                .FirstOrDefaultAsync();
+
+            if (formQuestion == null)
+            {
+                return new ApiResponse<AnswerDto>(false, ResponseMessage.FormQuestionNotFound, null, 404);
+            }
+
+            var formProcess = await _context.FormProcesses
+                .Where(fp => fp.FormID == answerCreateDto.FormID)
+                .FirstOrDefaultAsync();
+
+            if (formProcess == null)
+            {
+                return new ApiResponse<AnswerDto>(false, ResponseMessage.FormProcessNotFound, null, 404);
+            }
+
+            var formQuestionProcess = await _context.FormQuestionProcesses
+                .Where(fqp => fqp.FormQuestionID == formQuestion.FormQuestionID &&
+                              fqp.FormProcessID == formProcess.FormProcessID &&
+                              !fqp.IsDeleted)
+                .FirstOrDefaultAsync();
+
+            if (formQuestionProcess == null)
+            {
+                return new ApiResponse<AnswerDto>(false, ResponseMessage.FormQuestionProcessNotFound, null, 404);
+            }
+
             var answer = new Answer
             {
-                FormQuestionProcessID = answerCreateDto.FormQuestionProcessID,
+                FormQuestionProcessID = formQuestionProcess.FormQuestionProcessID,
                 AnswerText = answerCreateDto.AnswerText,
                 AnswerOptionID = answerCreateDto.AnswerOptionID,
                 FilePath = answerCreateDto.FilePath,
@@ -84,7 +118,9 @@ namespace FormMaker.Service
             var answerDto = new AnswerDto
             {
                 AnswerID = answer.AnswerID,
-                FormQuestionProcessID = answer.FormQuestionProcessID,
+                FormID = formQuestion.FormID,
+                ProcessID = formProcess.ProcessID,
+                QuestionID = formQuestion.QuestionID,
                 AnswerText = answer.AnswerText,
                 AnswerOptionID = answer.AnswerOptionID,
                 FilePath = answer.FilePath,
@@ -100,10 +136,37 @@ namespace FormMaker.Service
 
         public async Task<ApiResponse<AnswerDto>> UpdateAnswerAsync(AnswerUpdateDto answerUpdateDto)
         {
-            var answer = await _context.Answers.FirstOrDefaultAsync(a => a.AnswerID == answerUpdateDto.AnswerID);
+            var answer = await _context.Answers
+                .FirstOrDefaultAsync(a => a.AnswerID == answerUpdateDto.AnswerID && !a.IsDeleted);
 
             if (answer == null)
                 return new ApiResponse<AnswerDto>(false, ResponseMessage.AnswerNotFound, null, 404);
+
+            var formQuestionProcess = await _context.FormQuestionProcesses
+                .Where(fqp => fqp.FormQuestionProcessID == answer.FormQuestionProcessID && !fqp.IsDeleted)
+                .FirstOrDefaultAsync();
+
+            if (formQuestionProcess == null)
+                return new ApiResponse<AnswerDto>(false, ResponseMessage.FormQuestionProcessNotFound, null, 404);
+
+            var formProcess = await _context.FormProcesses
+                .Where(fp => fp.FormProcessID == formQuestionProcess.FormProcessID)
+                .FirstOrDefaultAsync();
+
+            if (formProcess == null)
+            {
+                return new ApiResponse<AnswerDto>(false, ResponseMessage.FormProcessNotFound, null, 404);
+            }
+
+            var formQuestion = await _context.FormQuestions
+                .Where(fq => fq.FormQuestionID == formQuestionProcess.FormQuestionID)
+                .FirstOrDefaultAsync();
+
+            if (formQuestion == null)
+            {
+                return new ApiResponse<AnswerDto>(false, ResponseMessage.FormQuestionNotFound, null, 404);
+            }
+
 
             answer.AnswerText = answerUpdateDto.AnswerText;
             answer.AnswerOptionID = answerUpdateDto.AnswerOptionID;
@@ -118,7 +181,9 @@ namespace FormMaker.Service
             var answerDto = new AnswerDto
             {
                 AnswerID = answer.AnswerID,
-                FormQuestionProcessID = answer.FormQuestionProcessID,
+                FormID = formQuestion.FormID,
+                ProcessID = formProcess.ProcessID,
+                QuestionID = formQuestion.QuestionID,
                 AnswerText = answer.AnswerText,
                 AnswerOptionID = answer.AnswerOptionID,
                 FilePath = answer.FilePath,
@@ -134,7 +199,9 @@ namespace FormMaker.Service
 
         public async Task<ApiResponse<bool>> DeleteAnswerAsync(int id)
         {
-            var answer = await _context.Answers.FirstOrDefaultAsync(a => a.AnswerID == id);
+
+            var answer = await _context.Answers
+                .FirstOrDefaultAsync(a => a.AnswerID == id && !a.IsDeleted);
 
             if (answer == null)
                 return new ApiResponse<bool>(false, ResponseMessage.AnswerNotFound, false, 404);
@@ -144,5 +211,6 @@ namespace FormMaker.Service
 
             return new ApiResponse<bool>(true, ResponseMessage.AnswerDeleted, true, 200);
         }
+
     }
 }
