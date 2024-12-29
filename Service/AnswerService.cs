@@ -22,6 +22,7 @@ namespace FormMaker.Service
                 .Where(a => !a.IsDeleted)
                 .Select(a => new AnswerDto
                 {
+
                     AnswerID = a.AnswerID,
                     FormID = a.FormQuestionProcess.FormProcess.FormID,
                     ProcessID = a.FormQuestionProcess.FormProcess.ProcessID,

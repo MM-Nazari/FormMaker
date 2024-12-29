@@ -1,6 +1,7 @@
 ﻿using FormMaker.Dto;
 using FormMaker.Interface;
 using FormMaker.Model;
+using FormMaker.Service;
 using FormMaker.Util;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,6 +45,7 @@ namespace FormMaker.Controllers
         {
             try
             {
+
                 ApiResponse<ProcessDto> response = await _processService.GetProcessByIdAsync(id);
                 return StatusCode(response.StatusCode, response);
             }
@@ -121,6 +123,26 @@ namespace FormMaker.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
             }
 
+        }
+
+        [HttpGet("process/{processId}")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<FormDto>>>> GetFormsByProcessId(int processId)
+        {
+            try
+            {
+                var response = await _processService.GetFormsByProcessIdAsync(processId);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace FormMaker.Util
+﻿using FormMaker.Dto;
+
+namespace FormMaker.Util
 {
     public class ResponseMessage
     {
@@ -43,6 +45,8 @@
         public const string FormProcessCreated = "Form process created successfully";
         public const string FormProcessUpdated = "Form process updated successfully";
         public const string FormProcessDeleted = "Form process deleted successfully";
+        public const string NoFormsFoundForProcess = "There is not any Form Related to this Process";
+        public const string StageDuplicateForProcess = "Stage is Duplicated";
 
         public const string FormLinkedProcess = "Form created and linked to process successfully";
 
@@ -52,6 +56,8 @@
         public const string FormQuestionCreated = "Form question created successfully";
         public const string FormQuestionUpdated = "Form question updated successfully";
         public const string FormQuestionDeleted = "Form question deleted successfully";
+        public const string NoQuestionsFoundForForm = "There is no Question Related to this Form";
+        public const string QuestionOrderDuplicateForForm = "Question Order is Duplicated";
 
         public const string QuestionLinkedForn = "Question created and linked to form and process successfully";
 
@@ -64,6 +70,9 @@
 
         // Process <-> Form <-> Question
         public const string FormWithProcessAndQuestionsCreated = "Process with Form and Questions has been created";
+
+        // Duplicate
+        public const string PriorityIsDuplicate = "An answer option with priority already exists for the question";
 
         // Internal Server Error 
         public const string InternalServerError = "Internal Server Error";

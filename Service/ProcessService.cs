@@ -132,5 +132,30 @@ namespace FormMaker.Service
 
             return new ApiResponse<bool>(true, ResponseMessage.ProcessDeleted, true, 200);
         }
+
+        public async Task<ApiResponse<IEnumerable<FormDto>>> GetFormsByProcessIdAsync(int processId)
+        {
+            // Fetch forms related to the process by ProcessID
+            var forms = await _context.FormProcesses
+                .Where(fp => fp.ProcessID == processId && !fp.IsDeleted && !fp.Form.IsDeleted)
+                .Select(fp => new FormDto
+                {
+                    FormID = fp.Form.FormID,
+                    FormTitle = fp.Form.FormTitle,
+                    FormDescription = fp.Form.FormDescription,
+                    IsFrequent = fp.Form.IsFrequent,
+                    CreatedAtJalali = Jalali.ToJalali(fp.Form.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(fp.Form.UpdatedAt),
+                    IsDeleted = fp.Form.IsDeleted
+                })
+                .ToListAsync();
+
+            if (!forms.Any())
+            {
+                return new ApiResponse<IEnumerable<FormDto>>(false, ResponseMessage.NoFormsFoundForProcess, null, 404);
+            }
+
+            return new ApiResponse<IEnumerable<FormDto>>(true, ResponseMessage.FormRetrieved, forms, 200);
+        }
     }
 }

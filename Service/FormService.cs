@@ -23,6 +23,11 @@ namespace FormMaker.Service
                 .Where(f => !f.IsDeleted)
                 .Select(f => new FormDto
                 {
+                    ProcessIDs = f.FormProcesses
+                        .Where(fp => !fp.IsDeleted)
+                        .Select(fp => fp.ProcessID)
+                        .Distinct()
+                        .ToList(),
                     FormID = f.FormID,
                     FormTitle = f.FormTitle,
                     FormDescription = f.FormDescription,
@@ -42,6 +47,11 @@ namespace FormMaker.Service
                 .Where(f => !f.IsDeleted && f.FormID == formId)
                 .Select(f => new FormDto
                 {
+                    ProcessIDs = f.FormProcesses
+                        .Where(fp => !fp.IsDeleted)
+                        .Select(fp => fp.ProcessID)
+                        .Distinct()
+                        .ToList(),
                     FormID = f.FormID,
                     FormTitle = f.FormTitle,
                     FormDescription = f.FormDescription,
@@ -76,6 +86,11 @@ namespace FormMaker.Service
 
             var formDto = new FormDto
             {
+                ProcessIDs = form.FormProcesses
+                        .Where(fp => !fp.IsDeleted)
+                        .Select(fp => fp.ProcessID)
+                        .Distinct()
+                        .ToList(),
                 FormID = form.FormID,
                 FormTitle = form.FormTitle,
                 FormDescription = form.FormDescription,
@@ -107,6 +122,7 @@ namespace FormMaker.Service
 
             var formDto = new FormDto
             {
+                ProcessIDs = form.FormProcesses.Where(fp => !fp.IsDeleted).Select(fp => fp.ProcessID).Distinct().ToList(),
                 FormID = form.FormID,
                 FormTitle = form.FormTitle,
                 FormDescription = form.FormDescription,
@@ -140,6 +156,7 @@ namespace FormMaker.Service
                 .Where(f => f.IsFrequent && !f.IsDeleted)
                 .Select(f => new FormDto
                 {
+                    ProcessIDs = f.FormProcesses.Where(fp => !fp.IsDeleted).Select(fp => fp.ProcessID).Distinct().ToList(),
                     FormID = f.FormID,
                     FormTitle = f.FormTitle,
                     FormDescription = f.FormDescription,
@@ -176,8 +193,21 @@ namespace FormMaker.Service
                 _context.Forms.Add(form);
                 await _context.SaveChangesAsync();
 
-                // Step 3: Create the FormProcess and link it to the form
-                var formProcess = new FormProcess
+            var stageExists = await _context.FormProcesses
+                .AnyAsync(fp => fp.ProcessID == formWithProcessCreateDto.ProcessID && fp.Stage == formWithProcessCreateDto.Stage && !fp.IsDeleted);
+
+            if (stageExists)
+            {
+                return new ApiResponse<FormWithProcessDto>(
+                    false,
+                    ResponseMessage.StageDuplicateForProcess,
+                    null,
+                    StatusCodes.Status400BadRequest
+                );
+            }
+
+            // Step 3: Create the FormProcess and link it to the form
+            var formProcess = new FormProcess
                 {
                     FormID = form.FormID,
                     ProcessID = formWithProcessCreateDto.ProcessID,
@@ -206,6 +236,40 @@ namespace FormMaker.Service
 
                 return new ApiResponse<FormWithProcessDto>(true, ResponseMessage.FormLinkedProcess, formWithProcessDto, 201);
 
+        }
+
+        public async Task<ApiResponse<IEnumerable<QuestionDto>>> GetQuestionsByFormIdAsync(int formId)
+        {
+            // Check if the form exists and is not deleted
+            var formExists = await _context.Forms.AnyAsync(f => f.FormID == formId && !f.IsDeleted);
+            if (!formExists)
+            {
+                return new ApiResponse<IEnumerable<QuestionDto>>(false, ResponseMessage.FormNotFound, null, 404);
+            }
+
+            // Fetch questions associated with the form
+            var questions = await _context.FormQuestions
+                .Where(fq => fq.FormID == formId && !fq.IsDeleted && !fq.Question.IsDeleted)
+                .OrderBy(fq => fq.QuestionOrder)
+                .Select(fq => new QuestionDto
+                {
+                    QuestionID = fq.Question.QuestionID,
+                    QuestionTitle = fq.Question.QuestionTitle,
+                    QuestionType = fq.Question.QuestionType,
+                    ValidationRule = fq.Question.ValidationRule,
+                    IsFrequent = fq.Question.IsFrequent,
+                    CreatedAtJalali = Jalali.ToJalali(fq.Question.CreatedAt),
+                    UpdatedAtJalali = Jalali.ToJalali(fq.Question.UpdatedAt),
+                    IsDeleted = fq.Question.IsDeleted
+                })
+                .ToListAsync();
+
+            if (!questions.Any())
+            {
+                return new ApiResponse<IEnumerable<QuestionDto>>(false, ResponseMessage.NoQuestionsFoundForForm, null, 404);
+            }
+
+            return new ApiResponse<IEnumerable<QuestionDto>>(true, ResponseMessage.QuestionRetrieved, questions, 200);
         }
 
     }

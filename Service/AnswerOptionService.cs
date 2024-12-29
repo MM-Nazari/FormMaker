@@ -59,6 +59,20 @@ namespace FormMaker.Service
 
         public async Task<ApiResponse<AnswerOptionDto>> CreateAnswerOptionAsync(AnswerOptionCreateDto answerOptionCreateDto)
         {
+            // Check if the priority already exists for the given QuestionID
+            var isDuplicatePriority = await _context.AnswerOptions
+                .AnyAsync(ao => ao.QuestionID == answerOptionCreateDto.QuestionID
+                             && ao.Priority == answerOptionCreateDto.Priority
+                             && !ao.IsDeleted);
+
+            if (isDuplicatePriority)
+            {
+                return new ApiResponse<AnswerOptionDto>(false,
+                    ResponseMessage.PriorityIsDuplicate,
+                    null,
+                    400);
+            }
+
             var answerOption = new AnswerOption
             {
                 QuestionID = answerOptionCreateDto.QuestionID,

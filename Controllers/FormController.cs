@@ -164,5 +164,25 @@ namespace FormMaker.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
             }
         }
+
+        [HttpGet("{formId}/questions")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<QuestionDto>>>> GetQuestionsByFormId(int formId)
+        {
+            try
+            {
+                var response = await _formService.GetQuestionsByFormIdAsync(formId);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ApiResponse<string>(
+                    false,
+                    ResponseMessage.InternalServerError,
+                    ex.Message,
+                    StatusCodes.Status500InternalServerError
+                );
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+        }
     }
 }

@@ -12,6 +12,9 @@
         public string UpdatedAtJalali { get; set; }
 
         public bool IsDeleted { get; set; } = false;
-        
+
+        public IEnumerable<int> FormIDs { get; set; }
+        public IEnumerable<int> ProcessIDs { get; set; }
+
     }
 }

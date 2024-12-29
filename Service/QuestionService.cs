@@ -20,8 +20,23 @@ namespace FormMaker.Service
         {
             var question = await _context.Questions
                 .Where(q => q.QuestionID == questionId)
+                .Include(q => q.FormQuestions)
+                .ThenInclude(fq => fq.FormQuestionProcesses)
+                .ThenInclude(fqp => fqp.FormProcess)
                 .Select(q => new QuestionDto
                 {
+                    FormIDs = q.FormQuestions
+                        .Where(fq => !fq.IsDeleted)
+                        .Select(fq => fq.FormID)
+                        .Distinct()
+                        .ToList(),
+                    ProcessIDs = q.FormQuestions
+                        .Where(fq => !fq.IsDeleted)
+                        .SelectMany(fq => fq.FormQuestionProcesses
+                            .Where(fqp => !fqp.IsDeleted)
+                            .Select(fqp => fqp.FormProcess.ProcessID))
+                        .Distinct()
+                        .ToList(),
                     QuestionID = q.QuestionID,
                     QuestionTitle = q.QuestionTitle,
                     QuestionType = q.QuestionType,
@@ -44,8 +59,23 @@ namespace FormMaker.Service
         public async Task<ApiResponse<IEnumerable<QuestionDto>>> GetAllQuestionsAsync()
         {
             var questions = await _context.Questions
+                .Include(q => q.FormQuestions)
+                .ThenInclude(fq => fq.FormQuestionProcesses)
+                .ThenInclude(fqp => fqp.FormProcess)
                 .Select(q => new QuestionDto
                 {
+                    FormIDs = q.FormQuestions
+                        .Where(fq => !fq.IsDeleted)
+                        .Select(fq => fq.FormID)
+                        .Distinct()
+                        .ToList(),
+                    ProcessIDs = q.FormQuestions
+                        .Where(fq => !fq.IsDeleted)
+                        .SelectMany(fq => fq.FormQuestionProcesses
+                            .Where(fqp => !fqp.IsDeleted)
+                            .Select(fqp => fqp.FormProcess.ProcessID))
+                        .Distinct()
+                        .ToList(),
                     QuestionID = q.QuestionID,
                     QuestionTitle = q.QuestionTitle,
                     QuestionType = q.QuestionType,
@@ -94,7 +124,10 @@ namespace FormMaker.Service
         public async Task<ApiResponse<QuestionDto>> UpdateQuestionAsync(QuestionUpdateDto questionUpdateDto)
         {
             var question = await _context.Questions
-                .FirstOrDefaultAsync(q => q.QuestionID == questionUpdateDto.QuestionID);
+                .Include(q => q.FormQuestions)
+                .ThenInclude(fq => fq.FormQuestionProcesses)
+                .ThenInclude(fqp => fqp.FormProcess)
+                .FirstOrDefaultAsync(q => q.QuestionID == questionUpdateDto.QuestionID); ;
 
             if (question == null)
             {
@@ -112,6 +145,18 @@ namespace FormMaker.Service
 
             var questionDto = new QuestionDto
             {
+                FormIDs = question.FormQuestions
+                    .Where(fq => !fq.IsDeleted)
+                    .Select(fq => fq.FormID)
+                    .Distinct()
+                    .ToList(),
+                ProcessIDs = question.FormQuestions
+                    .Where(fq => !fq.IsDeleted)
+                    .SelectMany(fq => fq.FormQuestionProcesses
+                        .Where(fqp => !fqp.IsDeleted)
+                        .Select(fqp => fqp.FormProcess.ProcessID))
+                    .Distinct()
+                    .ToList(),
                 QuestionID = question.QuestionID,
                 QuestionTitle = question.QuestionTitle,
                 QuestionType = question.QuestionType,
@@ -146,8 +191,23 @@ namespace FormMaker.Service
         {
             var questions = await _context.Questions
                 .Where(q => q.IsFrequent && !q.IsDeleted)
+                .Include(q => q.FormQuestions)
+                    .ThenInclude(fq => fq.FormQuestionProcesses)
+                    .ThenInclude(fqp => fqp.FormProcess)
                 .Select(q => new QuestionDto
                 {
+                    FormIDs = q.FormQuestions
+                        .Where(fq => !fq.IsDeleted)
+                        .Select(fq => fq.FormID)
+                        .Distinct()
+                        .ToList(),
+                    ProcessIDs = q.FormQuestions
+                        .Where(fq => !fq.IsDeleted)
+                        .SelectMany(fq => fq.FormQuestionProcesses
+                            .Where(fqp => !fqp.IsDeleted)
+                            .Select(fqp => fqp.FormProcess.ProcessID))
+                        .Distinct()
+                        .ToList(),
                     QuestionID = q.QuestionID,
                     QuestionTitle = q.QuestionTitle,
                     ValidationRule = q.ValidationRule,
@@ -179,8 +239,21 @@ namespace FormMaker.Service
                 _context.Questions.Add(question);
                 await _context.SaveChangesAsync();
 
-                // Step 2: Link the question to the form 
-                var formQuestion = new FormQuestion
+            var questionOrderExists = await _context.FormQuestions
+                .AnyAsync(fq => fq.FormID == createDto.FormID && fq.QuestionOrder == createDto.QuestionOrder && !fq.IsDeleted);
+
+            if (questionOrderExists)
+            {
+                return new ApiResponse<FormQuestionProcessAllDto>(
+                    false,
+                    ResponseMessage.QuestionOrderDuplicateForForm,
+                    null,
+                    StatusCodes.Status400BadRequest
+                );
+            }
+
+            // Step 2: Link the question to the form 
+            var formQuestion = new FormQuestion
                 {
                     FormID = createDto.FormID,
                     QuestionID = question.QuestionID,
