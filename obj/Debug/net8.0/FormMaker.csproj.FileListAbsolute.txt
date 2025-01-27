@@ -346,3 +346,7 @@ D:\Repos\formmaker\obj\Debug\net8.0\FormMaker.pdb
 D:\Repos\formmaker\obj\Debug\net8.0\FormMaker.genruntimeconfig.cache
 D:\Repos\formmaker\obj\Debug\net8.0\ref\FormMaker.dll
 C:\Users\M.Nazari\source\repos\FormMaker\obj\Debug\net8.0\FormMaker.csproj.CopyComplete
+C:\Users\M.Nazari\source\repos\FormMaker\bin\Debug\net8.0\xunit.abstractions.dll
+C:\Users\M.Nazari\source\repos\FormMaker\bin\Debug\net8.0\xunit.assert.dll
+C:\Users\M.Nazari\source\repos\FormMaker\bin\Debug\net8.0\xunit.core.dll
+C:\Users\M.Nazari\source\repos\FormMaker\bin\Debug\net8.0\xunit.execution.dotnet.dll

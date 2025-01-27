@@ -185,6 +185,7 @@ namespace FormMaker.Service
                 FormID = formQuestion.FormID,
                 ProcessID = formProcess.ProcessID,
                 QuestionID = formQuestion.QuestionID,
+
                 AnswerText = answer.AnswerText,
                 AnswerOptionID = answer.AnswerOptionID,
                 FilePath = answer.FilePath,

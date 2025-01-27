@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "AaI9xqTGABXciGCd6cqiba89Vsu5wAoGh9oqUd/DZ9H1iI6p8KGmyHvmbNSCw/o0aXb4+1K3+dITG93ymlMLcQ==",
+  "dgSpecHash": "p106g03Dc+c16sQYOHcPneLgaxPhhrI5pImnjmAZoT00wyBS9WmpZWC74eKHW7eFsLxDVPqs7isVefkLKvVRkA==",
   "success": true,
   "projectFilePath": "C:\\Users\\M.Nazari\\source\\repos\\FormMaker\\FormMaker.csproj",
   "expectedPackageFiles": [
@@ -158,7 +158,14 @@
     "C:\\Users\\M.Nazari\\.nuget\\packages\\system.threading.timer\\4.3.0\\system.threading.timer.4.3.0.nupkg.sha512",
     "C:\\Users\\M.Nazari\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512",
     "C:\\Users\\M.Nazari\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
-    "C:\\Users\\M.Nazari\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512"
+    "C:\\Users\\M.Nazari\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
+    "C:\\Users\\M.Nazari\\.nuget\\packages\\xunit\\2.9.2\\xunit.2.9.2.nupkg.sha512",
+    "C:\\Users\\M.Nazari\\.nuget\\packages\\xunit.abstractions\\2.0.3\\xunit.abstractions.2.0.3.nupkg.sha512",
+    "C:\\Users\\M.Nazari\\.nuget\\packages\\xunit.analyzers\\1.16.0\\xunit.analyzers.1.16.0.nupkg.sha512",
+    "C:\\Users\\M.Nazari\\.nuget\\packages\\xunit.assert\\2.9.2\\xunit.assert.2.9.2.nupkg.sha512",
+    "C:\\Users\\M.Nazari\\.nuget\\packages\\xunit.core\\2.9.2\\xunit.core.2.9.2.nupkg.sha512",
+    "C:\\Users\\M.Nazari\\.nuget\\packages\\xunit.extensibility.core\\2.9.2\\xunit.extensibility.core.2.9.2.nupkg.sha512",
+    "C:\\Users\\M.Nazari\\.nuget\\packages\\xunit.extensibility.execution\\2.9.2\\xunit.extensibility.execution.2.9.2.nupkg.sha512"
   ],
   "logs": []
 }
